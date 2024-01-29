@@ -1,17 +1,36 @@
 // src/index.js
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import express, { Express, Request, Response } from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Express + TypeScript Server');
 });
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
+const mongoose = require('mongoose');
+const uri = process.env.MONGODB_URI || '';
+
+// connect to mongodb database
+mongoose
+  .connect(uri)
+  .then((res: Object) => {
+    console.log('Successfully connected to MongoDB!');
+  })
+  .catch((err: Object) => {
+    mongoose.disconnect();
+    console.log('Failed to connect to MongoDB');
+    console.log(`Error: ${err}`);
+  });
