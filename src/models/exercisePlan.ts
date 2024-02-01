@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-// Exercise Session Schema
-export interface IExerciseSession extends Document {
+// Exercise Plan Schema
+export interface IExercisePlan extends Document {
     name: string;
     description: string;
     icon: string;
@@ -13,7 +13,7 @@ export interface IExerciseSession extends Document {
     intensity: string; // 'low', 'medium', 'high'
   }
 
-  const exerciseSessionSchema = new Schema({
+  const exercisePlanSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     icon: { type: String, required: true },
@@ -25,7 +25,7 @@ export interface IExerciseSession extends Document {
     intensity: { type: String, enum: ['low', 'medium', 'high'], required: true },
   });
 
-  // Create the Exercise Session model
-const EerciseSession = mongoose.model<IExerciseSession>('ExerciseSession', exerciseSessionSchema);
+  // Create the Exercise Plan model
+const exercisePlan = mongoose.model<IExercisePlan>('exercisePlan', exercisePlanSchema);
 
-export default ExerciseSession;
+export default exercisePlan;
