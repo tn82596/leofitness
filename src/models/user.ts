@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 import workoutPlan, { IWorkoutPlan } from './workoutPlan'; 
 
 export interface IUser extends Document {

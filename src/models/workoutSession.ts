@@ -1,13 +1,13 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
-interface IWorkoutSession extends Document {
+export interface IWorkoutSession extends Document {
 	name: string;
 	exercises: Types.ObjectId[];
 }
 
 const workoutSessionSchema = new Schema<IWorkoutSession>(
 	{
-		name: String,
+		name: {type: String, required: true},
 		exercises: [{ type: Types.ObjectId, ref: 'ExerciseSession' }], // Assuming 'Exercise' is the referenced model
 	},
 	{ timestamps: true },

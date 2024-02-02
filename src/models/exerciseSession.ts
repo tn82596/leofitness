@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-interface IExerciseSession extends Document {
+export interface IExerciseSession extends Document {
 	name: string;
 	description: string;
 	icon: string;
@@ -12,20 +12,18 @@ interface IExerciseSession extends Document {
 }
 
 const ExerciseSessionSchema = new Schema<IExerciseSession>({
-	name: String,
-	description: String,
-	icon: String,
-	muscle_type: {
-		type: String,
-		lowercase: true, // corrected from lower_case to lowercase
-	},
-	sets: Number,
-	weight: Number,
-	rest_time: Number,
+	name: { type: String, required: true },
+	description: { type: String, required: true },
+	icon: { type: String, required: true },
+	muscle_type: { type: String, lowercase: true, required: true },
+	sets: { type: Number, required: true },
+	weight: { type: Number, required: true },
+	rest_time: { type: Number, required: true },
 	intensity: {
 		type: String,
-		lowercase: true, // corrected from lower_case to lowercase
+		lowercase: true,
 		enum: ['low', 'medium', 'high'],
+		required: true,
 	},
 });
 
