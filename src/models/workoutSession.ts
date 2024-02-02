@@ -7,7 +7,7 @@ export interface IWorkoutSession extends Document {
 
 const workoutSessionSchema = new Schema<IWorkoutSession>(
 	{
-		name: {type: String, required: true},
+		name: { type: String, required: true },
 		exercises: [{ type: Types.ObjectId, ref: 'ExerciseSession' }], // Assuming 'Exercise' is the referenced model
 	},
 	{ timestamps: true },
