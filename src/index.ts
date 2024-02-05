@@ -3,6 +3,8 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import workoutSessionRouter from './routes/workoutSession';
+
 
 dotenv.config();
 
@@ -34,3 +36,5 @@ mongoose
 		console.log('Failed to connect to MongoDB');
 		console.log(`Error: ${err}`);
 	});
+
+app.use('/api/', workoutSessionRouter);
