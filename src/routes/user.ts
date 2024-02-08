@@ -35,3 +35,5 @@ router.delete('/user/:user_id', (req: Request, res: Response, next: NextFunction
     
     res.status(200).send({ status: 'success', data: dummy_data });
 });
+
+export default router;
