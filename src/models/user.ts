@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 import workoutPlan, { IWorkoutPlan } from './workoutPlan';
+import workoutSession, { IWorkoutSession } from './workoutSession';
 
 export interface IUser extends Document {
 	firstName: string;
@@ -10,6 +11,7 @@ export interface IUser extends Document {
 	bio: string;
 	picture: string;
 	workoutPlans: Types.ObjectId[] | IWorkoutPlan[];
+	workoutSessions: Types.ObjectId[] | IWorkoutSession[];
 }
 
 const userSchema = new Schema({
@@ -21,6 +23,7 @@ const userSchema = new Schema({
 	bio: { type: String },
 	picture: { type: String },
 	workoutPlans: [{ type: Schema.Types.ObjectId, ref: 'WorkoutPlan' }],
+	workoutSessions: [{ type: Schema.Types.ObjectId, ref: 'WorkoutSession' }],
 });
 
 const user = mongoose.model<IUser>('user', userSchema);
