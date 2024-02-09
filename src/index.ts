@@ -5,7 +5,6 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import workoutSessionRouter from './routes/workoutSession';
 
-
 dotenv.config();
 
 const app: Express = express();
