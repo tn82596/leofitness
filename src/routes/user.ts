@@ -13,18 +13,20 @@ const dummy_data = {
 const router = express.Router();
 
 // GET
-router.get('/user/:user_id', (req: Request, res: Response, next: NextFunction) => {
-    
+router.get('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user_id = req.params.user_id
+    }
     res.status(200).send(dummy_data);
 });
 
 // CREATE
 router.post('/user', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userData: IUser = req.body;
-        const newUser = new User(userData);
-        const savedUser = await newUser.save();
-        res.status(200).send({status: "success", data: savedUser});
+        const user_data: IUser = req.body;
+        const new_user = new User(user_data);
+        const saved_user = await new_user.save();
+        res.status(200).send({status: "success", data: saved_user});
     }
     catch (error) {
         res.status(500).json({ status: 'error', data: req.body });
