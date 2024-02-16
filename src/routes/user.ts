@@ -15,9 +15,15 @@ const router = express.Router();
 // GET
 router.get('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user_id = req.params.user_id
+        const user_id = req.params.user_id;
+        const user = await User.findById(user_id);
+        if (!user)
+            return res.status(404).json({ status: 'error', message: 'User not found' });
+
+        res.status(200).json({ status: 'success', data: user});
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Failed to fetch user'});
     }
-    res.status(200).send(dummy_data);
 });
 
 // CREATE
@@ -27,8 +33,7 @@ router.post('/user', async (req: Request, res: Response, next: NextFunction) => 
         const new_user = new User(user_data);
         const saved_user = await new_user.save();
         res.status(200).send({status: "success", data: saved_user});
-    }
-    catch (error) {
+    } catch (error) {
         res.status(500).json({ status: 'error', data: req.body });
     }
 });
