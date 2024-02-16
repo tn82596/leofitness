@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction} from 'express';
-import User from '../models/user';
+import User, { IUser } from '../models/user';
 
 const dummy_data = {
 	firstName: 'James',
@@ -19,9 +19,16 @@ router.get('/user/:user_id', (req: Request, res: Response, next: NextFunction) =
 });
 
 // CREATE
-router.post('/user/:user_id', (req: Request, res: Response, next: NextFunction) => {
-    
-    res.status(200).send({status: "success", data: dummy_data});
+router.post('/user', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userData: IUser = req.body;
+        const newUser = new User(userData);
+        const savedUser = await newUser.save();
+        res.status(200).send({status: "success", data: savedUser});
+    }
+    catch (error) {
+        res.status(500).json({ status: 'error', data: req.body });
+    }
 });
 
 // UPDATE
