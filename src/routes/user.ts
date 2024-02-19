@@ -39,9 +39,19 @@ router.post('/user', async (req: Request, res: Response, next: NextFunction) => 
 });
 
 // UPDATE
-router.put('/user/:user_id', (req: Request, res: Response, next: NextFunction) => {
-    
-    res.status(200).send({ status: 'success', data: dummy_data });
+router.put('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user_id = req.params.user_id;
+        const updated_data = req.body;
+        const updated_user = await User.findByIdAndUpdate(user_id, updated_data, { new: true });
+
+        if (!updated_user) {
+            return res.status(404).json({ status: 'error', message: 'User not found' });
+        }
+        return res.status(200).json({ status: 'success', data: updated_user });
+    } catch {
+        res.status(500).send({ status: 'error', data: dummy_data });
+    }
 });
 
 // DELETE
