@@ -1,15 +1,6 @@
 import express, { Request, Response, NextFunction} from 'express';
 import User, { IUser } from '../models/user';
 
-const dummy_data = {
-	firstName: 'James',
-    lastName: 'White',
-    fullName: 'James White',
-    email: 'jameswhite@gmail.com',
-    date: '02/05/2024',
-    bio: 'I like to workout',
-};
-
 const router = express.Router();
 
 // GET
@@ -55,7 +46,7 @@ router.put('/user/:user_id', async (req: Request, res: Response, next: NextFunct
 });
 
 // DELETE
-router.delete('/user/:user_id', (req: Request, res: Response, next: NextFunction) => {
+router.delete('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user_id = req.params.user_id;
         const deleted_user = await User.findByIdAndDelete(user_id);
@@ -65,7 +56,7 @@ router.delete('/user/:user_id', (req: Request, res: Response, next: NextFunction
         }
         return res.status(200).json({ status: 'error', message: 'User successfully deleted'});
     } catch {
-        return res.status(500).json({ status: 'error', message: 'User not deleted'});
+        return res.status(500).json({ status: 'error', message: 'Failed to delete user'});
     }
 });
 
