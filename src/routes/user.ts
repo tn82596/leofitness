@@ -50,14 +50,23 @@ router.put('/user/:user_id', async (req: Request, res: Response, next: NextFunct
         }
         return res.status(200).json({ status: 'success', data: updated_user });
     } catch {
-        res.status(500).send({ status: 'error', data: dummy_data });
+        res.status(500).send({ status: 'error', data: req.body });
     }
 });
 
 // DELETE
 router.delete('/user/:user_id', (req: Request, res: Response, next: NextFunction) => {
-    
-    res.status(200).send({ status: 'success', data: dummy_data });
+    try {
+        const user_id = req.params.user_id;
+        const deleted_user = await User.findByIdAndDelete(user_id);
+
+        if (!deleted_user) {
+            return res.status(404).json({ status: 'error', message: 'User not found' });
+        }
+        return res.status(200).json({ status: 'error', message: 'User successfully deleted'});
+    } catch {
+        return res.status(500).json({ status: 'error', message: 'User not deleted'});
+    }
 });
 
 export default router;
