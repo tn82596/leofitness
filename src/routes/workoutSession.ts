@@ -65,6 +65,7 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 
 		res.status(201).json({ status: 'success', data: session });
 	} catch (err) {
+		console.log(err);
 		next(err);
 	}
 });
@@ -72,8 +73,54 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 // UPDATE
 router.put(
 	'/workout_session/:workout_session_id',
-	(req: Request, res: Response) => {
-		res.status(200).send({ status: 'success', data: dummy_workout });
+	async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const workoutSessionId = req.params.workout_session_id;
+			const updateObj = req.body; // Assuming req.body contains the fields to update
+
+			const exercises = req.body.exercises;
+			const exerciseIds = [];
+
+			// Loop through exercises
+			for (let i = 0; i < exercises.length; i++) {
+				const existingExercise = await ExerciseSessionModel.findOne({
+					name: exercises[i].name,
+					description: exercises[i].description,
+					icon: exercises[i].icon,
+					muscleType: exercises[i].muscleType,
+					sets: exercises[i].sets,
+					weight: exercises[i].weight,
+					restTime: exercises[i].restTime,
+					intensity: exercises[i].intensity,
+				});
+
+				if (existingExercise) {
+					// If exercise already exists, push its ID to exerciseIds array
+					exerciseIds.push(existingExercise._id);
+				} else {
+					// If exercise doesn't exist, create a new one
+					const newExercise = new ExerciseSessionModel(exercises[i]);
+					const exercise = await newExercise.save();
+					exerciseIds.push(exercise._id);
+				}
+			}
+
+			updateObj.exercises = exerciseIds;
+			console.log(workoutSessionId);
+			// Use { new: true } to return the modified document rather than the original
+			const updatedSession = await WorkoutSessionModel.findOneAndUpdate(
+				{ _id: workoutSessionId },
+				updateObj,
+				{new: true}
+			);
+			if (updatedSession)
+				res.status(200).json({ status: 'success', data: updatedSession });
+			else
+				res.status(400).json({ status: 'error', message: 'workout session not found'});
+		} catch (err) {
+			console.log(err);
+			next(err);
+		}
 	},
 );
 
