@@ -127,8 +127,19 @@ router.put(
 // DELETE
 router.delete(
 	'/workout_session/:workout_session_id',
-	(req: Request, res: Response) => {
-		res.status(200).send({ status: 'success', data: dummy_workout });
+	async (req: Request, res: Response) => {
+		try {
+			const workoutSessionId = req.params.workout_session_id;
+			const deletedSession = await WorkoutSessionModel.findOneAndDelete({_id: workoutSessionId});
+
+			if (deletedSession)
+				res.status(200).send({ status: 'success', data: dummy_workout });
+			else
+				res.status(400).send({status: 'error', message: "workout session not found"});
+		}
+		catch (err) {
+
+		}
 	},
 );
 
