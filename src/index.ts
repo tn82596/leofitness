@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import workoutSessionRouter from './routes/workoutSession';
+import swaggerDocs from './utils/swagger';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.listen(port, () => {
 	console.log(`[server]: Server is running at http://localhost:${port}`);
+	swaggerDocs(app);
 });
 
 const uri = process.env.MONGODB_URI || '';
