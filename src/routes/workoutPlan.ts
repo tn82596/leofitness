@@ -1,4 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
+import WorkoutPlanModel from '../models/workoutSession';
+import ExercisePlanModel from '../models/exerciseSession';
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -14,15 +17,58 @@ const dummy_data = {
 };
 
 // GET
-router.get('/workout_plan/:user_id', (req: Request, res: Response, next: NextFunction) => {
-    // TODO: get workout session using user id
+router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {	
 	res.status(200).send([dummy_data, dummy_data]);
 });
 
 // CREATE
-router.post('/workout_plan/:workout_plan_id', (req: Request, res: Response, next: NextFunction) => {
-    // TODO: create an insert a new workout session
-	res.status(200).send({status: "success", data: dummy_data});
+router.post('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const exercises = req.body.exercises;
+		const exerciseIds = [];
+
+		for (let i = 0; i < exercises.length; i++) {
+			const existingExercise = await ExercisePlanModel.findOne({
+				name: exercises[i].name,
+				description: exercises[i].description,
+				icon: exercises[i].icon,
+				muscleType: exercises[i].muscleType,
+				sets: exercises[i].sets,
+				weight: exercises[i].weight,
+				restTime: exercises[i].restTime,
+				intensity: exercises[i].intensity,
+			});
+			if (existingExercise) {
+				exerciseIds.push(existingExercise._id);
+			}
+			else {
+				const newExercisePlan = new ExercisePlanModel(exercises[i]);
+				const savedExercisePlan = await newExercisePlan.save();
+				exerciseIds.push(savedExercisePlan._id);
+			}
+		}
+
+		const insertObj = {
+			name: req.body.name,
+			date: req.body.date,
+			exercises: exerciseIds,
+		}
+
+		const newWorkoutPlan = new WorkoutPlanModel(insertObj);
+		const savedWorkoutPlan = await newWorkoutPlan.save();
+
+		// add new workoutPlan to user's workoutPlan array
+		const user = await User.findById(req.params.user_id);
+		if (!user) {
+            return res.status(404).json({ status: 'error', message: 'User not found' });
+        }
+		user.workoutPlans.push(savedWorkoutPlan._id);
+		await user.save();
+
+		res.status(201).json({ status: 'success', data: savedWorkoutPlan })
+	} catch (error) {
+		res.status(500).json({ status: 'error', message: 'Failed to create workout plan' });
+	}
 });
 
 // UPDATE
