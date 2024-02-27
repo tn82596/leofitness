@@ -42,10 +42,15 @@ import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IWorkoutPlan extends Document {
 	name: string;
-	category: string;
-	exercises: Types.ObjectId[];
+	date: Date;
+	exercisePlan: Types.ObjectId | IExercisePlan;
 }
 
+const workoutPlanSchema = new Schema({
+	name: { type: String, required: true },
+	date: { type: Date, required: true },
+	exercisePlan: { type: Schema.Types.ObjectId, ref: 'exercisePlan', required: true },
+});
 const workoutPlanSchema = new Schema({
 	name: { type: String, required: true },
 	date: { type: Date, required: true },

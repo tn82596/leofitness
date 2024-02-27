@@ -84,7 +84,6 @@ router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: N
 router.get(
 	'/workout_plan/:user_id/category/:category',
 	async (req: Request, res: Response, next: NextFunction) => {
-<<<<<<< HEAD
 /**
  * @openapi
  * /api/workout_plan/{user_id}/category/{category}:
@@ -142,8 +141,6 @@ router.get(
  *                   type: string
  *                   example: Internal server error
  */
-=======
->>>>>>> origin/main
 		try {
 			const userId = req.params.user_id;
 			const category = req.params.category;
@@ -168,7 +165,6 @@ router.get(
 router.get(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
-<<<<<<< HEAD
 /**
  * @openapi
  * /api/workout_plan/{user_id}/category/{category}:
@@ -223,12 +219,6 @@ router.get(
 			const workoutPlanId = req.params.workout_plan_id;
 			const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
 
-=======
-		try {
-			const workoutPlanId = req.params.workout_plan_id;
-			const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
-
->>>>>>> origin/main
 			if (!workoutPlan) {
 				return res.status(404).json({ message: 'Workout plan not found' });
 			}
@@ -353,7 +343,6 @@ router.post('/workout_plan/:user_id', async (req: Request, res: Response, next: 
 router.put(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
-<<<<<<< HEAD
 /**
  * @openapi
  * /api/workout_plan/{workout_plan_id}:
@@ -401,8 +390,6 @@ router.put(
  *       '500':
  *         description: Internal server error
  */
-=======
->>>>>>> origin/main
 		try {
 			const workoutPlanId = req.params.workout_plan_id;
 			const updateObj = req.body;
@@ -452,7 +439,6 @@ router.put(
 router.delete(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
-<<<<<<< HEAD
 /**
  * @openapi
  * /api/workout_plan/{workout_plan_id}:
@@ -497,24 +483,13 @@ router.delete(
 			const workoutPlanId = req.params.workout_plan_id;
 			const deletedWorkoutPlan = await WorkoutPlan.findByIdAndDelete(workoutPlanId);
 
-=======
-		try {
-			const workoutPlanId = req.params.workout_plan_id;
-			const deletedWorkoutPlan = await WorkoutPlan.findByIdAndDelete(workoutPlanId);
-
->>>>>>> origin/main
 			if (!deletedWorkoutPlan) {
 				return res.status(404).json({ message: 'Workout plan not found' });
 			}
 			res.status(200).send({ status: 'success' });
-<<<<<<< HEAD
 		} catch (err) {
 			console.log(err);
 			next(err);
-=======
-		} catch {
-			res.status(400).send({ status: 'error', message: 'workout session not found' });
->>>>>>> origin/main
 		}
 	},
 );
