@@ -22,8 +22,8 @@ const userSchema = new Schema({
 	date: { type: Date, required: true },
 	bio: { type: String },
 	picture: { type: String },
-	workoutPlans: [{ type: Schema.Types.ObjectId, ref: 'WorkoutPlan' }],
-	workoutSessions: [{ type: Schema.Types.ObjectId, ref: 'WorkoutSession' }],
+	workoutPlans: [{ type: Schema.Types.ObjectId, ref: 'workoutPlan' }],
+	workoutSessions: [{ type: Schema.Types.ObjectId, ref: 'workoutSession' }],
 });
 
 const user = mongoose.model<IUser>('user', userSchema);
