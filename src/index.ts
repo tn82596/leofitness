@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req: Request, res: Response) => {
-	res.send('Server up!');
+	res.send('Server up (updated for testing w/ EB)!');
 });
 
 app.listen(port, () => {
