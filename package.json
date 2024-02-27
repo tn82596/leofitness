@@ -8,7 +8,7 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write 'src/**/*.ts'",
     "build": "npx tsc",
-    "start": "node build/index.js",
+    "start": "ls -la; ls -la build; node build/index.js",
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],
