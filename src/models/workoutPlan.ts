@@ -3,15 +3,18 @@ import { IExercisePlan } from './exercisePlan';
 
 export interface IWorkoutPlan extends Document {
 	name: string;
-	date: Date;
-	exercisePlan: Types.ObjectId | IExercisePlan;
+	category: string;
+	exercises: Types.ObjectId[];
 }
 
-const workoutPlanSchema = new Schema({
-	name: { type: String, required: true },
-	date: { type: Date, required: true },
-	exercisePlan: { type: Schema.Types.ObjectId, ref: 'exercisePlan', required: true },
-});
+const workoutPlanSchema = new Schema(
+	{
+		name: { type: String, required: true },
+		category: { type: String, required: true},
+		exercises: [{ type: Types.ObjectId, ref: 'ExercisePlan' }]
+	},
+	{ timestamps: true},
+);
 
 const workoutPlan = mongoose.model<IWorkoutPlan>('workoutPlan', workoutPlanSchema);
 
