@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+
 import WorkoutSessionModel from '../models/workoutSession';
 import ExerciseSessionModel from '../models/exerciseSession';
 
@@ -20,12 +21,72 @@ const dummy_workout = {
 
 // GET
 router.get('/workout_session/:user_id', (req: Request, res: Response) => {
+	/**
+	 * @openapi
+	 * /api/workout_session/{user_id}:
+	 *   get:
+	 *     tags:
+	 *       - Workout Session
+	 *     summary: Returns all the workout sessions of a user
+	 *     description: Returns all workout sessions associated with the specified user ID.
+	 *     parameters:
+	 *       - in: path
+	 *         name: user_id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *         description: The ID of the user whose workout sessions are to be retrieved.
+	 *     responses:
+	 *       '200':
+	 *         description: OK
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: array
+	 *               items:
+	 *                 $ref: '#/components/schemas/WorkoutSession'
+	 *       '404':
+	 *         description: User not found
+	 *       '500':
+	 *         description: Internal Server Error
+	 */
 	// TODO: get workout session using user id
 	res.status(200).send([dummy_workout, dummy_workout]);
 });
 
 // CREATE
 router.post('/workout_session/', async (req: Request, res: Response, next: NextFunction) => {
+	/**
+	 * @openapi
+	 * /api/workout_session:
+	 *   post:
+	 *     tags:
+	 *       - Workout Session
+	 *     summary: Create a new workout session which contains a list of exercise objects
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/WorkoutSession'
+	 *     responses:
+	 *       '201':
+	 *         description: Created
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 status:
+	 *                   type: string
+	 *                 data:
+	 *                   $ref: '#/components/schemas/WorkoutSession'
+	 *       '400':
+	 *         description: Bad Request
+	 *       '500':
+	 *         description: Internal Server Error
+	 */
+
 	try {
 		const exercises = req.body.exercises;
 		const exerciseIds = [];
@@ -73,7 +134,55 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 // UPDATE
 router.put(
 	'/workout_session/:workout_session_id',
-	async (req: Request, res: Response, next: NextFunction) => {
+
+  async (req: Request, res: Response, next: NextFunction) => {
+		/**
+		 * @openapi
+		 * /workout_session/{workout_session_id}:
+		 *   put:
+		 *     tags:
+		 *       - Workout Session
+		 *     summary: Update a workout session
+		 *     description: Update a workout session by providing the workout session ID and the fields to update.
+		 *     parameters:
+		 *       - in: path
+		 *         name: workout_session_id
+		 *         required: true
+		 *         schema:
+		 *           type: string
+		 *         description: The ID of the workout session to update.
+		 *     requestBody:
+		 *       required: true
+		 *       content:
+		 *         application/json:
+		 *           schema:
+		 *             type: object
+		 *             properties:
+		 *               name:
+		 *                 type: string
+		 *               exercises:
+		 *                 type: array
+		 *                 items:
+		 *                   $ref: '#/components/schemas/ExerciseSession'
+		 *     responses:
+		 *       '200':
+		 *         description: OK
+		 *         content:
+		 *           application/json:
+		 *             schema:
+		 *               type: object
+		 *               properties:
+		 *                 status:
+		 *                   type: string
+		 *                 data:
+		 *                   $ref: '#/components/schemas/WorkoutSession'
+		 *       '400':
+		 *         description: Bad Request
+		 *       '404':
+		 *         description: Workout session not found
+		 *       '500':
+		 *         description: Internal Server Error
+		 */
 		try {
 			const workoutSessionId = req.params.workout_session_id;
 			const updateObj = req.body; // Assuming req.body contains the fields to update
@@ -124,6 +233,41 @@ router.put(
 
 // DELETE
 router.delete('/workout_session/:workout_session_id', async (req: Request, res: Response) => {
+	/**
+	 * @openapi
+	 * /workout_session/{workout_session_id}:
+	 *   delete:
+	 *     tags:
+	 *       - Workout Session
+	 *     summary: Delete a workout session
+	 *     description: Delete a workout session by providing the workout session ID.
+	 *     parameters:
+	 *       - in: path
+	 *         name: workout_session_id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *         description: The ID of the workout session to delete.
+	 *     responses:
+	 *       '200':
+	 *         description: OK
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 status:
+	 *                   type: string
+	 *                 data:
+	 *                   $ref: '#/components/schemas/WorkoutSession'
+	 *       '400':
+	 *         description: Bad Request
+	 *       '404':
+	 *         description: Workout session not found
+	 *       '500':
+	 *         description: Internal Server Error
+	 */
+
 	try {
 		const workoutSessionId = req.params.workout_session_id;
 		const deletedSession = await WorkoutSessionModel.findOneAndDelete({ _id: workoutSessionId });
