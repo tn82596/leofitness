@@ -9,14 +9,14 @@ import swaggerDocs from './utils/swagger';
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req: Request, res: Response) => {
-	res.send('Server up!');
+	res.send('Server up (updated for testing w/ EB)!');
 });
 
 app.listen(port, () => {

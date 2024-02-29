@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+
 import WorkoutSessionModel from '../models/workoutSession';
 import ExerciseSessionModel from '../models/exerciseSession';
 
@@ -133,7 +134,8 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 // UPDATE
 router.put(
 	'/workout_session/:workout_session_id',
-	async (req: Request, res: Response, next: NextFunction) => {
+
+  async (req: Request, res: Response, next: NextFunction) => {
 		/**
 		 * @openapi
 		 * /workout_session/{workout_session_id}:
