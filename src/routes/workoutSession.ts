@@ -42,7 +42,7 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 				restTime: exercises[i].restTime,
 				intensity: exercises[i].intensity,
 			});
-			console.log(existingExercise)
+			console.log(existingExercise);
 			if (existingExercise) {
 				// If exercise already exists, push its ID to exerciseIds array
 				exerciseIds.push(existingExercise._id);
@@ -111,12 +111,10 @@ router.put(
 			const updatedSession = await WorkoutSessionModel.findOneAndUpdate(
 				{ _id: workoutSessionId },
 				updateObj,
-				{new: true}
+				{ new: true },
 			);
-			if (updatedSession)
-				res.status(200).json({ status: 'success', data: updatedSession });
-			else
-				res.status(400).json({ status: 'error', message: 'workout session not found'});
+			if (updatedSession) res.status(200).json({ status: 'success', data: updatedSession });
+			else res.status(400).json({ status: 'error', message: 'workout session not found' });
 		} catch (err) {
 			console.log(err);
 			next(err);
@@ -125,22 +123,14 @@ router.put(
 );
 
 // DELETE
-router.delete(
-	'/workout_session/:workout_session_id',
-	async (req: Request, res: Response) => {
-		try {
-			const workoutSessionId = req.params.workout_session_id;
-			const deletedSession = await WorkoutSessionModel.findOneAndDelete({_id: workoutSessionId});
+router.delete('/workout_session/:workout_session_id', async (req: Request, res: Response) => {
+	try {
+		const workoutSessionId = req.params.workout_session_id;
+		const deletedSession = await WorkoutSessionModel.findOneAndDelete({ _id: workoutSessionId });
 
-			if (deletedSession)
-				res.status(200).send({ status: 'success', data: dummy_workout });
-			else
-				res.status(400).send({status: 'error', message: "workout session not found"});
-		}
-		catch (err) {
-
-		}
-	},
-);
+		if (deletedSession) res.status(200).send({ status: 'success', data: dummy_workout });
+		else res.status(400).send({ status: 'error', message: 'workout session not found' });
+	} catch (err) {}
+});
 
 export default router;
