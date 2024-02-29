@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 
 /**
  * @openapi
@@ -15,21 +15,13 @@ import { Schema, model, Document } from 'mongoose';
  *           type: string
  *         muscleType:
  *           type: string
- *         sets:
- *           type: integer
- *           format: int32
- *         weight:
- *           type: number
- *           format: float
- *         restTime:
- *           type: integer
- *           format: int32
- *         intensity:
+ *         category:
  *           type: string
- *           enum:
- *             - low
- *             - medium
- *             - high
+ *         sets:
+ *           type: array
+ *           items:
+ *             type: string
+ *           uniqueItems: true
  */
 
 export interface IExerciseSession extends Document {
@@ -37,10 +29,8 @@ export interface IExerciseSession extends Document {
 	description: string;
 	icon: string;
 	muscleType: string;
-	sets: number;
-	weight: number;
-	restTime: number;
-	intensity: string;
+	category: string; // Updated property
+	sets: Types.ObjectId[]; // Updated type
 }
 
 const ExerciseSessionSchema = new Schema<IExerciseSession>({
@@ -48,15 +38,8 @@ const ExerciseSessionSchema = new Schema<IExerciseSession>({
 	description: { type: String, required: true },
 	icon: { type: String, required: true },
 	muscleType: { type: String, lowercase: true, required: true },
-	sets: { type: Number, required: true },
-	weight: { type: Number, required: true },
-	restTime: { type: Number, required: true },
-	intensity: {
-		type: String,
-		lowercase: true,
-		enum: ['low', 'medium', 'high'],
-		required: true,
-	},
+	category: { type: String, required: true }, // Updated property
+	sets: [{ type: Types.ObjectId, ref: 'SetSession' }],
 });
 
 const ExerciseSessionModel = model<IExerciseSession>('ExerciseSession', ExerciseSessionSchema);

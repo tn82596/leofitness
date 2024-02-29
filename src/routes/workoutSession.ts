@@ -135,7 +135,7 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 router.put(
 	'/workout_session/:workout_session_id',
 
-  async (req: Request, res: Response, next: NextFunction) => {
+	async (req: Request, res: Response, next: NextFunction) => {
 		/**
 		 * @openapi
 		 * /workout_session/{workout_session_id}:
