@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
+
 /**
  * @openapi
  * components:
@@ -36,7 +37,7 @@ import mongoose, { Schema, Document, Types } from 'mongoose';
  *             reps: 10
  *             weight: 15
  *             restTime: 45
- *             intensity: "medium"
+ *             intesity: "medium"
  */
 
 export interface IWorkoutPlan extends Document {
