@@ -79,8 +79,10 @@ router.get('/workout_plan/:user_id', (req, res, next) => __awaiter(void 0, void 
 router.get('/workout_plan/:user_id/category/:category', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /workout_plan/{user_id}/category/{category}:
+     * /api/workout_plan/{user_id}/category/{category}:
      *   get:
+     *     tags:
+     *       - Workout Plan
      *     summary: Get all workout plans belonging to a user associated with a certain category
      *     description: Retrieve all workout plans belonging to a specific user that match the given category.
      *     parameters:
@@ -155,6 +157,8 @@ router.get('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
      * @openapi
      * /api/workout_plan/{user_id}/category/{category}:
      *   get:
+     *     tags:
+     *       - Workout Plan
      *     summary: Get workout plans of a user by category
      *     description: Retrieve workout plans of a user based on the specified category.
      *     parameters:
@@ -217,6 +221,8 @@ router.post('/workout_plan/:user_id', (req, res, next) => __awaiter(void 0, void
      * @openapi
      * /api/workout_plan/{user_id}:
      *   post:
+     *     tags:
+     *       - Workout Plan
      *     summary: Create a new workout plan for a user
      *     description: Create a new workout plan and associate it with the specified user.
      *     parameters:
@@ -320,6 +326,8 @@ router.put('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
      * @openapi
      * /api/workout_plan/{workout_plan_id}:
      *   put:
+     *     tags:
+     *       - Workout Plan
      *     summary: Update an existing workout plan
      *     description: Update an existing workout plan identified by the workout_plan_id.
      *     parameters:
@@ -408,6 +416,8 @@ router.delete('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(vo
      * @openapi
      * /api/workout_plan/{workout_plan_id}:
      *   delete:
+     *     tags:
+     *       - Workout Plan
      *     summary: Delete a workout plan
      *     description: Delete a workout plan identified by the workout_plan_id.
      *     parameters:
