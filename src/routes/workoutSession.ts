@@ -134,7 +134,6 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 // UPDATE
 router.put(
 	'/workout_session/:workout_session_id',
-
 	async (req: Request, res: Response, next: NextFunction) => {
 		/**
 		 * @openapi
