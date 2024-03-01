@@ -17,6 +17,46 @@ const user_1 = __importDefault(require("../models/user"));
 const router = express_1.default.Router();
 // GET
 router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    /**
+     * @openapi
+     * /api/user/{user_id}:
+     *   get:
+     *     summary: Retrieve a user by ID
+     *     description: Retrieve user information based on the provided user ID.
+     *     parameters:
+     *       - in: path
+     *         name: user_id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: ID of the user to retrieve.
+     *     responses:
+     *       '200':
+     *         description: A successful response with the user information.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                   description: Status of the response (success).
+     *                 data:
+     *                   $ref: '#/components/schemas/User'
+     *       '404':
+     *         description: User not found.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                   description: Status of the response (error).
+     *                 message:
+     *                   type: string
+     *                   description: Error message indicating that the user was not found.
+     */
     try {
         const user_id = req.params.user_id;
         const user = yield user_1.default.findById(user_id);
@@ -31,6 +71,32 @@ router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
 }));
 // CREATE
 router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    /**
+     * @openapi
+     * /api/user:
+     *   post:
+     *     summary: Create a new user
+     *     description: Create a new user with the provided user data.
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/User'
+     *     responses:
+     *       '200':
+     *         description: A successful response with the created user data.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                   description: Status of the response (success).
+     *                 data:
+     *                   $ref: '#/components/schemas/User'
+     */
     try {
         const user_data = req.body;
         const new_user = new user_1.default(user_data);
@@ -44,6 +110,52 @@ router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
 }));
 // UPDATE
 router.put('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    /**
+     * @openapi
+     * /api/user/{user_id}:
+     *   put:
+     *     summary: Update a user by ID
+     *     description: Update user information based on the provided user ID.
+     *     parameters:
+     *       - in: path
+     *         name: user_id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: ID of the user to update.
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/User'
+     *     responses:
+     *       '200':
+     *         description: A successful response with the updated user data.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                   description: Status of the response (success).
+     *                 data:
+     *                   $ref: '#/components/schemas/User'
+     *       '404':
+     *         description: User not found.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                   description: Status of the response (error).
+     *                 message:
+     *                   type: string
+     *                   description: Error message indicating that the user was not found.
+     */
     try {
         const user_id = req.params.user_id;
         const updated_data = req.body;
@@ -60,6 +172,47 @@ router.put('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
 }));
 // DELETE
 router.delete('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    /**
+     * @openapi
+     * /api/user/{user_id}:
+     *   delete:
+     *     summary: Delete a user by ID
+     *     description: Delete a user based on the provided user ID.
+     *     parameters:
+     *       - in: path
+     *         name: user_id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: ID of the user to delete.
+     *     responses:
+     *       '200':
+     *         description: A successful response indicating that the user was deleted.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                   description: Status of the response (success).
+     *                 message:
+     *                   type: string
+     *                   description: Success message indicating that the user was deleted.
+     *       '404':
+     *         description: User not found.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 status:
+     *                   type: string
+     *                   description: Status of the response (error).
+     *                 message:
+     *                   type: string
+     *                   description: Error message indicating that the user was not found.
+     */
     try {
         const user_id = req.params.user_id;
         const deleted_user = yield user_1.default.findByIdAndDelete(user_id);

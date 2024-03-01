@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-// import mongoose from 'mongoose';
+const mongoose_1 = __importDefault(require("mongoose"));
 const workoutSession_1 = __importDefault(require("./routes/workoutSession"));
 const swagger_1 = __importDefault(require("./utils/swagger"));
 dotenv_1.default.config();
@@ -25,17 +25,17 @@ app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
     (0, swagger_1.default)(app);
 });
-// const uri = process.env.MONGODB_URI || '';
+const uri = process.env.MONGODB_URI || '';
 // connect to mongodb database
-// mongoose
-// 	.connect(uri)
-// 	.then(() => {
-// 		console.log('Successfully connected to MongoDB!');
-// 	})
-// 	.catch((err: mongoose.Error) => {
-// 		mongoose.disconnect();
-// 		console.log('Failed to connect to MongoDB');
-// 		console.log(`Error: ${err}`);
-// 	});
+mongoose_1.default
+    .connect(uri)
+    .then(() => {
+    console.log('Successfully connected to MongoDB!');
+})
+    .catch((err) => {
+    mongoose_1.default.disconnect();
+    console.log('Failed to connect to MongoDB');
+    console.log(`Error: ${err}`);
+});
 app.use('/api/', workoutSession_1.default);
 // node build/index.js
