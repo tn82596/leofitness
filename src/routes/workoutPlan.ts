@@ -68,6 +68,61 @@ router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: N
 router.get(
 	'/workout_plan/:user_id/category/:category',
 	async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @openapi
+ * /workout_plan/{user_id}/category/{category}:
+ *   get:
+ *     summary: Get all workout plans belonging to a user associated with a certain category
+ *     description: Retrieve all workout plans belonging to a specific user that match the given category.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         description: ID of the user whose workout plans are to be retrieved.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: category
+ *         required: true
+ *         description: Category of the workout plans to retrieve.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved workout plans.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/WorkoutPlan'
+ *       '404':
+ *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
 		try {
 			const userId = req.params.user_id;
 			const category = req.params.category;
@@ -92,7 +147,7 @@ router.get(
 router.get(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
-		/**
+/**
  * @openapi
  * /api/workout_plan/{user_id}/category/{category}:
  *   get:
@@ -157,7 +212,7 @@ router.get(
 
 // Create a new workout plan and update the user's workoutPlans array
 router.post('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {
-	/**
+/**
  * @openapi
  * /api/workout_plan/{user_id}:
  *   post:
@@ -266,7 +321,7 @@ router.post('/workout_plan/:user_id', async (req: Request, res: Response, next: 
 router.put(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
-		/**
+/**
  * @openapi
  * /api/workout_plan/{workout_plan_id}:
  *   put:
@@ -360,7 +415,7 @@ router.put(
 router.delete(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
-		/**
+/**
  * @openapi
  * /api/workout_plan/{workout_plan_id}:
  *   delete:
