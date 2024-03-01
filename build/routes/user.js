@@ -21,6 +21,8 @@ router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
      * @openapi
      * /api/user/{user_id}:
      *   get:
+     *     tags:
+     *       - User
      *     summary: Retrieve a user by ID
      *     description: Retrieve user information based on the provided user ID.
      *     parameters:
@@ -75,6 +77,8 @@ router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
      * @openapi
      * /api/user:
      *   post:
+     *     tags:
+     *       - User
      *     summary: Create a new user
      *     description: Create a new user with the provided user data.
      *     requestBody:
@@ -114,6 +118,8 @@ router.put('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
      * @openapi
      * /api/user/{user_id}:
      *   put:
+     *     tags:
+     *       - User
      *     summary: Update a user by ID
      *     description: Update user information based on the provided user ID.
      *     parameters:
@@ -176,6 +182,8 @@ router.delete('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, vo
      * @openapi
      * /api/user/{user_id}:
      *   delete:
+     *     tags:
+     *       - User
      *     summary: Delete a user by ID
      *     description: Delete a user based on the provided user ID.
      *     parameters:
