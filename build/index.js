@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const workoutSession_1 = __importDefault(require("./routes/workoutSession"));
+const swagger_1 = __importDefault(require("./utils/swagger"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 8080;
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 });
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
+    (0, swagger_1.default)(app);
 });
 const uri = process.env.MONGODB_URI || '';
 // connect to mongodb database

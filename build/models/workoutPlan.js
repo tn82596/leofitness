@@ -26,8 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const workoutPlanSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
-    date: { type: Date, required: true },
-    exercisePlan: { type: mongoose_1.Schema.Types.ObjectId, ref: 'exercisePlan', required: true },
-});
+    category: { type: String, required: true },
+    exercises: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'ExercisePlan' }],
+}, { timestamps: true });
 const workoutPlan = mongoose_1.default.model('workoutPlan', workoutPlanSchema);
 exports.default = workoutPlan;
