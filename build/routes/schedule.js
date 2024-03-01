@@ -23,8 +23,10 @@ router.get('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, v
      * @openapi
      * /api/schedule/{user_id}:
      *   get:
-     *     summary: Retrieve a user's schedule
-     *     description: Retrieve the schedule of a user based on the provided user ID.
+     *     tags:
+     *       - Schedule
+     *     summary: Get a user's schedule
+     *     description: Retrieve a user's schedule based on the provided user ID.
      *     parameters:
      *       - in: path
      *         name: user_id
@@ -54,7 +56,7 @@ router.get('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, v
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (error).
+     *                   description: Error status indicating that the user was not found.
      *                 message:
      *                   type: string
      *                   description: Error message indicating that the user was not found.
@@ -71,21 +73,23 @@ router.get('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, v
         next(err);
     }
 }));
-// Create a new schedule and update the user's workoutPlans array
+// Create a new schedule and update the schedule field
 router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
      * /api/schedule/{user_id}:
      *   post:
-     *     summary: Create a new schedule and update the user's workoutPlans array
-     *     description: Create a new schedule and update the user's workoutPlans array based on the provided user ID and schedule data.
+     *     tags:
+     *       - Schedule
+     *     summary: Create a new schedule and update the user's schedule field
+     *     description: Create a new schedule with provided start and end dates, and update the user's schedule field accordingly.
      *     parameters:
      *       - in: path
      *         name: user_id
      *         required: true
      *         schema:
      *           type: string
-     *         description: ID of the user for whom the schedule needs to be created and updated.
+     *         description: ID of the user for whom the new schedule is created.
      *     requestBody:
      *       required: true
      *       content:
@@ -93,17 +97,19 @@ router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, 
      *           schema:
      *             type: object
      *             properties:
-     *               name:
+     *               startDate:
      *                 type: string
-     *                 description: Name of the schedule.
-     *               category:
+     *                 format: date
+     *                 description: Start date of the new schedule.
+     *               endDate:
      *                 type: string
-     *                 description: Category of the schedule.
+     *                 format: date
+     *                 description: End date of the new schedule.
      *               workoutPlans:
      *                 type: array
      *                 items:
      *                   $ref: '#/components/schemas/WorkoutPlan'
-     *                 description: Array of workout plans included in the schedule.
+     *                 description: Array of workout plans associated with the new schedule.
      *     responses:
      *       '201':
      *         description: A successful response indicating that the schedule was created and the user's workoutPlans array was updated.
@@ -126,7 +132,7 @@ router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, 
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (error).
+     *                   description: Error status indicating that the user was not found.
      *                 message:
      *                   type: string
      *                   description: Error message indicating that the user was not found.
@@ -155,8 +161,8 @@ router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, 
             }
         }
         const insertObj = {
-            name: req.body.name,
-            category: req.body.category,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate,
             workoutPlans: workoutPlanIds,
         };
         const newSchedule = new schedule_1.default(insertObj);
@@ -175,14 +181,16 @@ router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, 
         next(err);
     }
 }));
-// update a user's schedule
+// update a schedule
 router.put('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
      * /api/schedule/{schedule_id}:
      *   put:
-     *     summary: Update a user's schedule
-     *     description: Update a user's schedule based on the provided schedule ID and updated data.
+     *     tags:
+     *       - Schedule
+     *     summary: Update a schedule
+     *     description: Update an existing schedule with new start and end dates, and associated workout plans.
      *     parameters:
      *       - in: path
      *         name: schedule_id
@@ -200,16 +208,16 @@ router.put('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 
      *               startDate:
      *                 type: string
      *                 format: date
-     *                 description: Start date of the updated schedule.
+     *                 description: New start date for the schedule.
      *               endDate:
      *                 type: string
      *                 format: date
-     *                 description: End date of the updated schedule.
+     *                 description: New end date for the schedule.
      *               workoutPlans:
      *                 type: array
      *                 items:
      *                   $ref: '#/components/schemas/WorkoutPlan'
-     *                 description: Array of updated workout plans included in the schedule.
+     *                 description: Array of updated workout plans associated with the schedule.
      *     responses:
      *       '200':
      *         description: A successful response indicating that the schedule was updated successfully.
@@ -220,7 +228,7 @@ router.put('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 
      *               properties:
      *                 message:
      *                   type: string
-     *                   description: Success message indicating that the schedule was updated.
+     *                   description: Success message indicating that the schedule was updated successfully.
      *                 data:
      *                   $ref: '#/components/schemas/Schedule'
      *       '404':
@@ -282,20 +290,22 @@ router.put('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 
 router.delete('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/workout_plan/{workout_plan_id}:
-     *   get:
-     *     summary: Get a specific workout plan based on workout plan ID
-     *     description: Retrieve a specific workout plan based on the provided workout plan ID.
+     * /api/schedule/{schedule_id}:
+     *   delete:
+     *     tags:
+     *       - Schedule
+     *     summary: Delete a schedule
+     *     description: Delete an existing schedule.
      *     parameters:
      *       - in: path
-     *         name: workout_plan_id
+     *         name: schedule_id
      *         required: true
      *         schema:
      *           type: string
-     *         description: ID of the workout plan to retrieve.
+     *         description: ID of the schedule to be deleted.
      *     responses:
      *       '200':
-     *         description: A successful response with the requested workout plan.
+     *         description: A successful response indicating that the schedule was deleted successfully.
      *         content:
      *           application/json:
      *             schema:
@@ -303,11 +313,9 @@ router.delete('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, vo
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (success).
-     *                 data:
-     *                   $ref: '#/components/schemas/WorkoutPlan'
+     *                   description: Success status indicating that the schedule was deleted successfully.
      *       '404':
-     *         description: Workout plan not found.
+     *         description: Schedule not found.
      *         content:
      *           application/json:
      *             schema:
@@ -315,7 +323,7 @@ router.delete('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, vo
      *               properties:
      *                 message:
      *                   type: string
-     *                   description: Error message indicating that the workout plan was not found.
+     *                   description: Error message indicating that the schedule was not found.
      */
     try {
         const scheduleId = req.params.schedule_id;

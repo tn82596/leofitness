@@ -81,6 +81,8 @@ router.get('/workout_plan/:user_id/category/:category', (req, res, next) => __aw
      * @openapi
      * /api/workout_plan/{user_id}/category/{category}:
      *   get:
+     *     tags:
+     *       - Workout Plan
      *     summary: Get all workout plans belonging to a user associated with a certain category
      *     description: Retrieve all workout plans belonging to a user associated with a specific category based on the provided user ID and category.
      *     parameters:
@@ -146,6 +148,8 @@ router.get('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
      * @openapi
      * /api/workout_plan/{workout_plan_id}:
      *   get:
+     *     tags:
+     *       - Workout Plan
      *     summary: Get a specific workout plan based on workout plan ID
      *     description: Retrieve a specific workout plan based on the provided workout plan ID.
      *     parameters:
@@ -347,8 +351,6 @@ router.put('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
      *         description: Internal server error
      */
     try {
-        const workoutPlanId = req.params.workout_plan_id;
-        const updateObj = req.body;
         const exercises = req.body.exercises;
         const exerciseIds = [];
         for (let i = 0; i < exercises.length; i++) {
@@ -371,7 +373,12 @@ router.put('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
                 exerciseIds.push(savedExercisePlan._id);
             }
         }
-        updateObj.exercises = exerciseIds;
+        const updateObj = {
+            name: req.body.name,
+            category: req.body.category,
+            exercises: exerciseIds,
+        };
+        const workoutPlanId = req.params.workout_plan_id;
         const updatedWorkoutPlan = yield workoutPlan_1.default.findByIdAndUpdate(workoutPlanId, updateObj, {
             new: true,
         });
