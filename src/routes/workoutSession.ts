@@ -273,7 +273,9 @@ router.delete('/workout_session/:workout_session_id', async (req: Request, res: 
 
 		if (deletedSession) res.status(200).send({ status: 'success', data: dummy_workout });
 		else res.status(400).send({ status: 'error', message: 'workout session not found' });
-	} catch (err) {}
+	} catch (err) {
+		console.log(`error: ${err}`);
+	}
 });
 
 export default router;
