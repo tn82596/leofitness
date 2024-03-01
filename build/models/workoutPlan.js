@@ -26,8 +26,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const workoutPlanSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
+<<<<<<< HEAD
     category: { type: String, required: true },
     exercises: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'ExercisePlan' }],
 }, { timestamps: true });
+=======
+    date: { type: Date, required: true },
+    exercisePlan: { type: mongoose_1.Schema.Types.ObjectId, ref: 'exercisePlan', required: true },
+});
+>>>>>>> 60b5630 (testing if build deployed)
 const workoutPlan = mongoose_1.default.model('workoutPlan', workoutPlanSchema);
 exports.default = workoutPlan;
