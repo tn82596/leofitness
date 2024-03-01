@@ -11,8 +11,9 @@ router.get('/user/:user_id', async (req: Request, res: Response, next: NextFunct
 		if (!user) return res.status(404).json({ status: 'error', message: 'User not found' });
 
 		res.status(200).json({ status: 'success', data: user });
-	} catch (error) {
-		res.status(500).json({ status: 'error', message: 'Failed to fetch user' });
+	} catch (err) {
+		console.log(err);
+		next(err);
 	}
 });
 
@@ -23,8 +24,9 @@ router.post('/user', async (req: Request, res: Response, next: NextFunction) => 
 		const new_user = new User(user_data);
 		const saved_user = await new_user.save();
 		res.status(200).send({ status: 'success', data: saved_user });
-	} catch (error) {
-		res.status(500).json({ status: 'error', data: req.body });
+	} catch (err) {
+		console.log(err);
+		next(err);
 	}
 });
 
@@ -39,8 +41,9 @@ router.put('/user/:user_id', async (req: Request, res: Response, next: NextFunct
 			return res.status(404).json({ status: 'error', message: 'User not found' });
 		}
 		return res.status(200).json({ status: 'success', data: updated_user });
-	} catch {
-		res.status(500).send({ status: 'error', data: req.body });
+	} catch (err) {
+		console.log(err);
+		next(err);
 	}
 });
 
@@ -54,8 +57,9 @@ router.delete('/user/:user_id', async (req: Request, res: Response, next: NextFu
 			return res.status(404).json({ status: 'error', message: 'User not found' });
 		}
 		return res.status(200).json({ status: 'error', message: 'User successfully deleted' });
-	} catch {
-		return res.status(500).json({ status: 'error', message: 'Failed to delete user' });
+	} catch (err) {
+		console.log(err);
+		next(err);
 	}
 });
 

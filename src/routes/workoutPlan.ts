@@ -1,23 +1,55 @@
 import express, { Request, Response, NextFunction } from 'express';
-import WorkoutPlan, { IWorkoutPlan } from '../models/workoutPlan';
+import WorkoutPlan from '../models/workoutPlan';
 import ExercisePlan from '../models/exercisePlan';
 import User from '../models/user';
 
 const router = express.Router();
 
-const dummy_data = {
-	name: 'bench press',
-	description: 'sit on bench and push heavy circle',
-	icon: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bbc.com%2Fnews%2Fworld-us-canada-37493165&psig=AOvVaw2qm3bu5JC-rWltqZWtXRiF&ust=1706904020436000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCKD38JD3ioQDFQAAAAAdAAAAABAD',
-	muscle_type: 'chest',
-	sets: 2,
-	weight: 225,
-	rest_time: 100,
-	intensity: 'high',
-};
-
 // Get all workout plans belonging to a certain user
 router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @openapi
+ * /api/workout_plan/{user_id}:
+ *   get:
+ *     tags:
+ *       - Workout Plan
+ *     summary: Get workout plans of a user
+ *     description: Retrieve workout plans associated with the specified user ID.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user whose workout plans are to be retrieved.
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/WorkoutPlan'
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       '500':
+ *         description: Internal Server Error
+ */
 	try {
 		const userId = req.params.user_id;
 		const user = await User.findById(userId).populate('workoutPlans');
@@ -36,6 +68,63 @@ router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: N
 router.get(
 	'/workout_plan/:user_id/category/:category',
 	async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @openapi
+ * /api/workout_plan/{user_id}/category/{category}:
+ *   get:
+ *     tags:
+ *       - Workout Plan
+ *     summary: Get all workout plans belonging to a user associated with a certain category
+ *     description: Retrieve all workout plans belonging to a specific user that match the given category.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         description: ID of the user whose workout plans are to be retrieved.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: category
+ *         required: true
+ *         description: Category of the workout plans to retrieve.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved workout plans.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/WorkoutPlan'
+ *       '404':
+ *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
 		try {
 			const userId = req.params.user_id;
 			const category = req.params.category;
@@ -60,6 +149,56 @@ router.get(
 router.get(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @openapi
+ * /api/workout_plan/{user_id}/category/{category}:
+ *   get:
+ *     tags:
+ *       - Workout Plan
+ *     summary: Get workout plans of a user by category
+ *     description: Retrieve workout plans of a user based on the specified category.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user whose workout plans to retrieve
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Category of workout plans to retrieve
+ *     responses:
+ *       '200':
+ *         description: Successful retrieval of user's workout plans
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/WorkoutPlan'
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       '500':
+ *         description: Internal server error
+ */
+
 		try {
 			const workoutPlanId = req.params.workout_plan_id;
 			const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
@@ -77,6 +216,65 @@ router.get(
 
 // Create a new workout plan and update the user's workoutPlans array
 router.post('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @openapi
+ * /api/workout_plan/{user_id}:
+ *   post:
+ *     tags:
+ *       - Workout Plan
+ *     summary: Create a new workout plan for a user
+ *     description: Create a new workout plan and associate it with the specified user.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user to whom the workout plan belongs
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               exercises:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/ExercisePlan'
+ *     responses:
+ *       '201':
+ *         description: Successfully created a new workout plan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   $ref: '#/components/schemas/WorkoutPlan'
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       '500':
+ *         description: Internal server error
+ */
 	try {
 		const exercises = req.body.exercises;
 		const exerciseIds = [];
@@ -129,6 +327,53 @@ router.post('/workout_plan/:user_id', async (req: Request, res: Response, next: 
 router.put(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @openapi
+ * /api/workout_plan/{workout_plan_id}:
+ *   put:
+ *     tags:
+ *       - Workout Plan
+ *     summary: Update an existing workout plan
+ *     description: Update an existing workout plan identified by the workout_plan_id.
+ *     parameters:
+ *       - in: path
+ *         name: workout_plan_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the workout plan to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/WorkoutPlan'
+ *     responses:
+ *       '200':
+ *         description: Successfully updated the workout plan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Workout plan updated successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/WorkoutPlan'
+ *       '404':
+ *         description: Workout plan not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Workout plan not found
+ *       '500':
+ *         description: Internal server error
+ */
 		try {
 			const workoutPlanId = req.params.workout_plan_id;
 			const updateObj = req.body;
@@ -178,6 +423,46 @@ router.put(
 router.delete(
 	'/workout_plan/:workout_plan_id',
 	async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @openapi
+ * /api/workout_plan/{workout_plan_id}:
+ *   delete:
+ *     tags:
+ *       - Workout Plan
+ *     summary: Delete a workout plan
+ *     description: Delete a workout plan identified by the workout_plan_id.
+ *     parameters:
+ *       - in: path
+ *         name: workout_plan_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the workout plan to delete
+ *     responses:
+ *       '200':
+ *         description: Successfully deleted the workout plan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *       '404':
+ *         description: Workout plan not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Workout plan not found
+ *       '500':
+ *         description: Internal server error
+ */
+
 		try {
 			const workoutPlanId = req.params.workout_plan_id;
 			const deletedWorkoutPlan = await WorkoutPlan.findByIdAndDelete(workoutPlanId);
@@ -186,8 +471,9 @@ router.delete(
 				return res.status(404).json({ message: 'Workout plan not found' });
 			}
 			res.status(200).send({ status: 'success' });
-		} catch {
-			res.status(400).send({ status: 'error', message: 'workout session not found' });
+		} catch (err) {
+			console.log(err);
+			next(err);
 		}
 	},
 );

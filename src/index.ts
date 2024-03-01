@@ -29,15 +29,17 @@ app.listen(port, () => {
 const uri = process.env.MONGODB_URI || '';
 
 // connect to mongodb database
-mongoose
-	.connect(uri)
-	.then(() => {
-		console.log('Successfully connected to MongoDB!');
-	})
-	.catch((err: mongoose.Error) => {
-		mongoose.disconnect();
-		console.log('Failed to connect to MongoDB');
-		console.log(`Error: ${err}`);
-	});
+ mongoose
+ 	.connect(uri)
+ 	.then(() => {
+ 		console.log('Successfully connected to MongoDB!');
+ 	})
+ 	.catch((err: mongoose.Error) => {
+ 		mongoose.disconnect();
+ 		console.log('Failed to connect to MongoDB');
+ 		console.log(`Error: ${err}`);
+ 	});
 
 app.use('/api/', workoutSessionRouter);
+
+// node build/index.js
