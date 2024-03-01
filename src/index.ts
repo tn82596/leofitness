@@ -16,7 +16,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req: Request, res: Response) => {
-	res.send('Server up (updated for testing w/ EB)!');
+	// res.send('Server up (updated for testing w/ EB)!');
+	// For testing
+	res.send(`Server up! With MongoDB URI: "${process.env.MONGODB_URI || 'none'}"`);
 });
 
 app.listen(port, () => {
