@@ -134,8 +134,7 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 // UPDATE
 router.put(
 	'/workout_session/:workout_session_id',
-
-  async (req: Request, res: Response, next: NextFunction) => {
+	async (req: Request, res: Response, next: NextFunction) => {
 		/**
 		 * @openapi
 		 * /workout_session/{workout_session_id}:
@@ -274,7 +273,9 @@ router.delete('/workout_session/:workout_session_id', async (req: Request, res: 
 
 		if (deletedSession) res.status(200).send({ status: 'success', data: dummy_workout });
 		else res.status(400).send({ status: 'error', message: 'workout session not found' });
-	} catch (err) {}
+	} catch (err) {
+		console.log(`error: ${err}`);
+	}
 });
 
 export default router;

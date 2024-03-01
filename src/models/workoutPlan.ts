@@ -46,14 +46,11 @@ export interface IWorkoutPlan extends Document {
 	exercises: Types.ObjectId[];
 }
 
-const workoutPlanSchema = new Schema(
-	{
-		name: { type: String, required: true },
-		category: { type: String, required: true },
-		exercises: [{ type: Schema.Types.ObjectId, ref: 'ExercisePlan' }],
-	},
-	{ timestamps: true },
-);
+const workoutPlanSchema = new Schema({
+	name: { type: String, required: true },
+	date: { type: Date, required: true },
+	exercisePlan: { type: Types.ObjectId, ref: 'exercisePlan', required: true },
+});
 
 const workoutPlan = mongoose.model<IWorkoutPlan>('workoutPlan', workoutPlanSchema);
 
