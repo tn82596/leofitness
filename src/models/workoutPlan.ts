@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
+import ExercisePlan, { IExercisePlan } from './exercisePlan';
 
 /**
  * @openapi
@@ -46,11 +47,6 @@ export interface IWorkoutPlan extends Document {
 	exercisePlan: Types.ObjectId | IExercisePlan;
 }
 
-const workoutPlanSchema = new Schema({
-	name: { type: String, required: true },
-	date: { type: Date, required: true },
-	exercisePlan: { type: Schema.Types.ObjectId, ref: 'exercisePlan', required: true },
-});
 const workoutPlanSchema = new Schema({
 	name: { type: String, required: true },
 	date: { type: Date, required: true },

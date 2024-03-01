@@ -5,7 +5,6 @@ import User from '../models/user';
 
 const router = express.Router();
 
-<<<<<<< HEAD
 // Get all workout plans belonging to a certain user
 router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 /**
@@ -51,21 +50,6 @@ router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: N
  *       '500':
  *         description: Internal Server Error
  */
-=======
-const dummy_data = {
-	name: 'bench press',
-	description: 'sit on bench and push heavy circle',
-	icon: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bbc.com%2Fnews%2Fworld-us-canada-37493165&psig=AOvVaw2qm3bu5JC-rWltqZWtXRiF&ust=1706904020436000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCKD38JD3ioQDFQAAAAAdAAAAABAD',
-	muscle_type: 'chest',
-	sets: 2,
-	weight: 225,
-	rest_time: 100,
-	intensity: 'high',
-};
-
-// Get all workout plans belonging to a certain user
-router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> origin/main
 	try {
 		const userId = req.params.user_id;
 		const user = await User.findById(userId).populate('workoutPlans');

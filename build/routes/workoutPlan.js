@@ -17,6 +17,7 @@ const workoutPlan_1 = __importDefault(require("../models/workoutPlan"));
 const exercisePlan_1 = __importDefault(require("../models/exercisePlan"));
 const user_1 = __importDefault(require("../models/user"));
 const router = express_1.default.Router();
+// Get all workout plans belonging to a certain user
 router.get('/workout_plan/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi

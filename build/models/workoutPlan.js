@@ -27,11 +27,6 @@ const mongoose_1 = __importStar(require("mongoose"));
 const workoutPlanSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     date: { type: Date, required: true },
-    exercisePlan: { type: mongoose_1.Schema.Types.ObjectId, ref: 'exercisePlan', required: true },
-});
-const workoutPlanSchema = new mongoose_1.Schema({
-    name: { type: String, required: true },
-    date: { type: Date, required: true },
     exercisePlan: { type: mongoose_1.Types.ObjectId, ref: 'exercisePlan', required: true },
 });
 const workoutPlan = mongoose_1.default.model('workoutPlan', workoutPlanSchema);
