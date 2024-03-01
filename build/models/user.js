@@ -32,13 +32,9 @@ const userSchema = new mongoose_1.Schema({
     date: { type: Date, required: true },
     bio: { type: String },
     picture: { type: String },
-<<<<<<< HEAD
     schedule: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Schedule' },
     workoutPlans: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'WorkoutPlan' }],
     workoutSessions: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'WorkoutSession' }],
-=======
-    workoutPlans: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'WorkoutPlan' }],
->>>>>>> 60b5630 (testing if build deployed)
 });
 const user = mongoose_1.default.model('user', userSchema);
 exports.default = user;
