@@ -10,10 +10,10 @@ export interface IWorkoutPlan extends Document {
 const workoutPlanSchema = new Schema(
 	{
 		name: { type: String, required: true },
-		category: { type: String, required: true},
-		exercises: [{ type: Types.ObjectId, ref: 'ExercisePlan' }]
+		category: { type: String, required: true },
+		exercises: [{ type: Types.ObjectId, ref: 'ExercisePlan' }],
 	},
-	{ timestamps: true},
+	{ timestamps: true },
 );
 
 const workoutPlan = mongoose.model<IWorkoutPlan>('workoutPlan', workoutPlanSchema);
