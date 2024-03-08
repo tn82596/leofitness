@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import workoutSessionRouter from './routes/workoutSession';
+import userRouter from './routes/user';
+import scheduleRouter from './routes/schedule';
+import workoutPlanRouter from './routes/workoutPlan';
 import swaggerDocs from './utils/swagger';
 
 dotenv.config();
@@ -40,6 +43,9 @@ const uri = process.env.MONGODB_URI || '';
  		console.log(`Error: ${err}`);
  	});
 
-app.use('/api/', workoutSessionRouter);
+	app.use('/api/', workoutSessionRouter);
+	app.use('/api/', userRouter);
+	app.use('/api/', workoutPlanRouter);
+	app.use('/api/', scheduleRouter);
 
 // node build/index.js
