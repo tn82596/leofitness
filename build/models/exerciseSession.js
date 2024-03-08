@@ -5,10 +5,10 @@ const ExerciseSessionSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     icon: { type: String, required: true },
-    muscle_type: { type: String, lowercase: true, required: true },
+    muscleType: { type: String, lowercase: true, required: true },
     sets: { type: Number, required: true },
     weight: { type: Number, required: true },
-    rest_time: { type: Number, required: true },
+    restTime: { type: Number, required: true },
     intensity: {
         type: String,
         lowercase: true,
