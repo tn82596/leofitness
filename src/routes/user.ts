@@ -118,12 +118,12 @@ router.get('/user/:user_id', async (req: Request, res: Response, next: NextFunct
 router.post('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
- * /user:
+ * /user/{user_id}:
  *   post:
  *     tags:
  *       - User
  *     summary: Create a new user
- *     description: Create a new user with the provided user data.
+ *     description: Create a new user with the provided user data, setting document ID to google ID.
  *     requestBody:
  *       required: true
  *       content:
