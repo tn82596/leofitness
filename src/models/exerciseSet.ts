@@ -6,6 +6,11 @@ import { Schema, model, Document, Types } from 'mongoose';
  *   schemas:
  *     ExerciseSet:
  *       type: object
+ *       required:
+ *        - setNum
+ *        - weight
+ *        - duration
+ *        - restTime
  *       properties:
  *         setNum:
  *           type: integer
@@ -35,6 +40,6 @@ const ExerciseSetSchema = new Schema<IExerciseSet>({
 	restTime: { type: Number },
 });
 
-const SetSessionModel = model<IExerciseSet>('ExerciseSet', ExerciseSetSchema);
+const ExerciseSetModel = model<IExerciseSet>('ExerciseSet', ExerciseSetSchema);
 
-export default SetSessionModel;
+export default ExerciseSetModel;

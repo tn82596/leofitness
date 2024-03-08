@@ -6,6 +6,12 @@ import { Schema, model, Document, Types } from 'mongoose';
  *   schemas:
  *     ExerciseSession:
  *       type: object
+ *       required:
+ *         - name
+ *         - description
+ *         - icon
+ *         - muscleType
+ *         - category
  *       properties:
  *         name:
  *           type: string
@@ -20,7 +26,7 @@ import { Schema, model, Document, Types } from 'mongoose';
  *         sets:
  *           type: array
  *           items:
- *             type: string
+ *             $ref: '#/components/schemas/ExerciseSet'
  *           uniqueItems: true
  */
 
@@ -39,7 +45,7 @@ const ExerciseSessionSchema = new Schema<IExerciseSession>({
 	icon: { type: String, required: true },
 	muscleType: { type: String, lowercase: true, required: true },
 	category: { type: String, required: true }, // Updated property
-	sets: [{ type: Types.ObjectId, ref: 'SetSession' }],
+	sets: [{ type: Types.ObjectId, ref: 'ExerciseSet' }],
 });
 
 const ExerciseSessionModel = model<IExerciseSession>('ExerciseSession', ExerciseSessionSchema);
