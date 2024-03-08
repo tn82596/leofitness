@@ -234,55 +234,55 @@ router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, 
 // update a schedule
 router.put('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
- * @openapi
- * /schedule/{schedule_id}:
- *   put:
- *     tags:
- *       - Schedule
- *     summary: Update a schedule
- *     description: Update a schedule based on the provided schedule ID and update object.
- *     parameters:
- *       - in: path
- *         name: schedule_id
- *         required: true
- *         schema:
- *           type: string
- *         description: ID of the schedule to be updated.
- *       - in: body
- *         name: body
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             workoutPlans:
- *               type: array
- *               items:
- *                 type: string
- *               description: An array of updated workout plan IDs associated with the schedule
- *     responses:
- *       '200':
- *         description: Successfully updated the schedule
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Schedule updated successfully
- *                 data:
- *                   $ref: '#/components/schemas/Schedule'
- *       '404':
- *         description: One or more workout plans not found or schedule not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: One or more workout plans not found or schedule not found
- */
+     * @openapi
+     * /schedule/{schedule_id}:
+     *   put:
+     *     tags:
+     *       - Schedule
+     *     summary: Update a schedule
+     *     description: Update a schedule based on the provided schedule ID and update object.
+     *     parameters:
+     *       - in: path
+     *         name: schedule_id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: ID of the schedule to be updated.
+     *       - in: body
+     *         name: body
+     *         required: true
+     *         schema:
+     *           type: object
+     *           properties:
+     *             workoutPlans:
+     *               type: array
+     *               items:
+     *                 type: string
+     *               description: An array of updated workout plan IDs associated with the schedule
+     *     responses:
+     *       '200':
+     *         description: Successfully updated the schedule
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Schedule updated successfully
+     *                 data:
+     *                   $ref: '#/components/schemas/Schedule'
+     *       '404':
+     *         description: One or more workout plans not found or schedule not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: One or more workout plans not found or schedule not found
+     */
     try {
         const updateObj = req.body;
         if (updateObj.hasOwnProperty('workoutPlans')) {
@@ -299,9 +299,7 @@ router.put('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 
         if (!updatedSchedule) {
             return res.status(404).json({ message: 'Schedule not found' });
         }
-        res
-            .status(200)
-            .json({ message: 'Schedule updated successfully', data: updatedSchedule });
+        res.status(200).json({ message: 'Schedule updated successfully', data: updatedSchedule });
     }
     catch (err) {
         console.log(err);
