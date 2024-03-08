@@ -18,10 +18,10 @@ const exercisePlan_1 = __importDefault(require("../models/exercisePlan"));
 const user_1 = __importDefault(require("../models/user"));
 const router = express_1.default.Router();
 // Get all workout plans belonging to a certain user
-router.get('/workout_plan/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/workout_plan/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/workout_plan/{user_id}:
+     * /api/workout_plan/user/{user_id}:
      *   get:
      *     tags:
      *       - Workout Plan
@@ -64,7 +64,12 @@ router.get('/workout_plan/:user_id', (req, res, next) => __awaiter(void 0, void 
      */
     try {
         const userId = req.params.user_id;
-        const user = yield user_1.default.findById(userId).populate('workoutPlans');
+        const user = yield user_1.default.findById(userId)
+            .populate({
+            path: 'workoutPlans',
+            model: 'WorkoutPlan',
+            populate: { path: 'exercises', model: 'ExercisePlan' }
+        });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -76,10 +81,10 @@ router.get('/workout_plan/:user_id', (req, res, next) => __awaiter(void 0, void 
     }
 }));
 // Get all workout plans belonging to a user associated with a certain category
-router.get('/workout_plan/:user_id/category/:category', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/workout_plan/user/:user_id/category/:category', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/workout_plan/{user_id}/category/{category}:
+     * /api/workout_plan/user/{user_id}/category/{category}:
      *   get:
      *     tags:
      *       - Workout Plan
@@ -130,7 +135,9 @@ router.get('/workout_plan/:user_id/category/:category', (req, res, next) => __aw
         const category = req.params.category;
         const user = yield user_1.default.findById(userId).populate({
             path: 'workoutPlans',
+            model: 'WorkoutPlan',
             match: { category: category },
+            populate: { path: 'exercises', model: 'ExercisePlan' }
         });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -185,7 +192,7 @@ router.get('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
      */
     try {
         const workoutPlanId = req.params.workout_plan_id;
-        const workoutPlan = yield workoutPlan_1.default.findById(workoutPlanId);
+        const workoutPlan = yield workoutPlan_1.default.findById(workoutPlanId).populate('exercises');
         if (!workoutPlan) {
             return res.status(404).json({ message: 'Workout plan not found' });
         }
@@ -351,33 +358,32 @@ router.put('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
      *         description: Internal server error
      */
     try {
-        const exercises = req.body.exercises;
-        const exerciseIds = [];
-        for (let i = 0; i < exercises.length; i++) {
-            const existingExercise = yield exercisePlan_1.default.findOne({
-                name: exercises[i].name,
-                description: exercises[i].description,
-                icon: exercises[i].icon,
-                muscleType: exercises[i].muscleType,
-                sets: exercises[i].sets,
-                weight: exercises[i].weight,
-                restTime: exercises[i].restTime,
-                intensity: exercises[i].intensity,
-            });
-            if (existingExercise) {
-                exerciseIds.push(existingExercise._id);
+        const updateObj = req.body;
+        if (updateObj.hasOwnProperty('exercises')) {
+            const exercises = req.body.exercises;
+            const exerciseIds = [];
+            for (let i = 0; i < exercises.length; i++) {
+                const existingExercise = yield exercisePlan_1.default.findOne({
+                    name: exercises[i].name,
+                    description: exercises[i].description,
+                    icon: exercises[i].icon,
+                    muscleType: exercises[i].muscleType,
+                    sets: exercises[i].sets,
+                    weight: exercises[i].weight,
+                    restTime: exercises[i].restTime,
+                    intensity: exercises[i].intensity,
+                });
+                if (existingExercise) {
+                    exerciseIds.push(existingExercise._id);
+                }
+                else {
+                    const newExercisePlan = new exercisePlan_1.default(exercises[i]);
+                    const savedExercisePlan = yield newExercisePlan.save();
+                    exerciseIds.push(savedExercisePlan._id);
+                }
             }
-            else {
-                const newExercisePlan = new exercisePlan_1.default(exercises[i]);
-                const savedExercisePlan = yield newExercisePlan.save();
-                exerciseIds.push(savedExercisePlan._id);
-            }
+            updateObj.exercises = exerciseIds;
         }
-        const updateObj = {
-            name: req.body.name,
-            category: req.body.category,
-            exercises: exerciseIds,
-        };
         const workoutPlanId = req.params.workout_plan_id;
         const updatedWorkoutPlan = yield workoutPlan_1.default.findByIdAndUpdate(workoutPlanId, updateObj, {
             new: true,

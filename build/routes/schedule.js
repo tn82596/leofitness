@@ -18,10 +18,10 @@ const workoutPlan_1 = __importDefault(require("../models/workoutPlan"));
 const user_1 = __importDefault(require("../models/user"));
 const router = express_1.default.Router();
 // Get a user's schedule
-router.get('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/schedule/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/schedule/{user_id}:
+     * /api/schedule/user/{user_id}:
      *   get:
      *     tags:
      *       - Schedule
@@ -63,10 +63,67 @@ router.get('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, v
      */
     try {
         const user_id = req.params.user_id;
-        const user = yield user_1.default.findById(user_id).populate('schedule');
+        const user = yield user_1.default.findById(user_id).populate({
+            path: 'schedule',
+            populate: { path: 'workoutPlans' }
+        });
         if (!user)
             return res.status(404).json({ status: 'error', message: 'User not found' });
         res.status(200).json({ status: 'success', data: user.schedule });
+    }
+    catch (err) {
+        console.log(err);
+        next(err);
+    }
+}));
+// Get a schedule by schedule id
+router.get('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    /**
+ * @openapi
+ * /schedule/{schedule_id}:
+ *   get:
+ *     tags:
+ *       - Schedule
+ *     summary: Get a schedule by schedule ID
+ *     description: Retrieve a schedule based on the provided schedule ID.
+ *     parameters:
+ *       - in: path
+ *         name: schedule_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the schedule to be retrieved.
+ *     responses:
+ *       '200':
+ *         description: A successful response with the schedule.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   $ref: '#/components/schemas/Schedule'
+ *       '404':
+ *         description: Schedule not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Schedule not found.
+ */
+    try {
+        const scheduleId = req.params.schedule_id;
+        const schedule = yield schedule_1.default.findById(scheduleId).populate('workoutPlans');
+        if (!schedule) {
+            return res.status(404).json({ message: 'Schedule not found' });
+        }
+        res.status(200).json({ status: 'success', data: schedule });
     }
     catch (err) {
         console.log(err);
@@ -77,42 +134,41 @@ router.get('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, v
 router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/schedule/{user_id}:
+     * /schedule/{user_id}:
      *   post:
      *     tags:
      *       - Schedule
-     *     summary: Create a new schedule and update the user's schedule field
-     *     description: Create a new schedule with provided start and end dates, and update the user's schedule field accordingly.
+     *     summary: Create a new schedule for a user
+     *     description: Create a new schedule for a user based on the provided user and workout plan IDs.
      *     parameters:
      *       - in: path
      *         name: user_id
      *         required: true
      *         schema:
      *           type: string
-     *         description: ID of the user for whom the new schedule is created.
-     *     requestBody:
-     *       required: true
-     *       content:
-     *         application/json:
-     *           schema:
-     *             type: object
-     *             properties:
-     *               startDate:
+     *         description: ID of the user for whom the schedule needs to be created.
+     *       - in: body
+     *         name: body
+     *         required: true
+     *         schema:
+     *           type: object
+     *           properties:
+     *             startDate:
+     *               type: string
+     *               format: date
+     *               description: The start date of the schedule
+     *             endDate:
+     *               type: string
+     *               format: date
+     *               description: The end date of the schedule
+     *             workoutPlanIds:
+     *               type: array
+     *               items:
      *                 type: string
-     *                 format: date
-     *                 description: Start date of the new schedule.
-     *               endDate:
-     *                 type: string
-     *                 format: date
-     *                 description: End date of the new schedule.
-     *               workoutPlans:
-     *                 type: array
-     *                 items:
-     *                   $ref: '#/components/schemas/WorkoutPlan'
-     *                 description: Array of workout plans associated with the new schedule.
+     *               description: An array of workout plan IDs associated with the schedule
      *     responses:
      *       '201':
-     *         description: A successful response indicating that the schedule was created and the user's workoutPlans array was updated.
+     *         description: Successfully created a new schedule
      *         content:
      *           application/json:
      *             schema:
@@ -120,52 +176,46 @@ router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, 
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (success).
+     *                   example: success
      *                 data:
      *                   $ref: '#/components/schemas/Schedule'
-     *       '404':
-     *         description: User not found.
+     *       '400':
+     *         description: Invalid input data
      *         content:
      *           application/json:
      *             schema:
      *               type: object
      *               properties:
-     *                 status:
-     *                   type: string
-     *                   description: Error status indicating that the user was not found.
      *                 message:
      *                   type: string
-     *                   description: Error message indicating that the user was not found.
+     *                   example: Invalid input data
+     *       '404':
+     *         description: One or more workout plans not found or user not found
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: One or more workout plans not found or user not found
      */
     try {
-        const workoutPlans = req.body.workoutPlans;
-        const workoutPlanIds = [];
-        for (let i = 0; i < workoutPlans.length; i++) {
-            const existingWorkoutPlan = yield workoutPlan_1.default.findOne({
-                name: workoutPlans[i].name,
-                description: workoutPlans[i].description,
-                icon: workoutPlans[i].icon,
-                muscleType: workoutPlans[i].muscleType,
-                sets: workoutPlans[i].sets,
-                weight: workoutPlans[i].weight,
-                restTime: workoutPlans[i].restTime,
-                intensity: workoutPlans[i].intensity,
-            });
-            if (existingWorkoutPlan) {
-                workoutPlanIds.push(existingWorkoutPlan._id);
-            }
-            else {
-                const newWorkoutPlan = new workoutPlan_1.default(workoutPlans[i]);
-                const savedWorkoutPlan = yield newWorkoutPlan.save();
-                workoutPlanIds.push(savedWorkoutPlan._id);
-            }
+        const { startDate, endDate, workoutPlans } = req.body;
+        // Validate input data
+        if (!startDate || !endDate || !workoutPlans || !Array.isArray(workoutPlans)) {
+            return res.status(400).json({ message: 'Invalid input data' });
         }
-        const insertObj = {
-            startDate: req.body.startDate,
-            endDate: req.body.endDate,
-            workoutPlans: workoutPlanIds,
-        };
-        const newSchedule = new schedule_1.default(insertObj);
+        // Check if all provided workout plan IDs exist
+        const existingWorkoutPlans = yield workoutPlan_1.default.find({ _id: { $in: workoutPlans } });
+        if (existingWorkoutPlans.length !== workoutPlans.length) {
+            return res.status(404).json({ message: 'One or more workout plans not found' });
+        }
+        const newSchedule = new schedule_1.default({
+            startDate,
+            endDate,
+            workoutPlans,
+        });
         const savedSchedule = yield newSchedule.save();
         // add new schedule to user
         const user = yield user_1.default.findById(req.params.user_id);
@@ -184,94 +234,66 @@ router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, 
 // update a schedule
 router.put('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
-     * @openapi
-     * /api/schedule/{schedule_id}:
-     *   put:
-     *     tags:
-     *       - Schedule
-     *     summary: Update a schedule
-     *     description: Update an existing schedule with new start and end dates, and associated workout plans.
-     *     parameters:
-     *       - in: path
-     *         name: schedule_id
-     *         required: true
-     *         schema:
-     *           type: string
-     *         description: ID of the schedule to be updated.
-     *     requestBody:
-     *       required: true
-     *       content:
-     *         application/json:
-     *           schema:
-     *             type: object
-     *             properties:
-     *               startDate:
-     *                 type: string
-     *                 format: date
-     *                 description: New start date for the schedule.
-     *               endDate:
-     *                 type: string
-     *                 format: date
-     *                 description: New end date for the schedule.
-     *               workoutPlans:
-     *                 type: array
-     *                 items:
-     *                   $ref: '#/components/schemas/WorkoutPlan'
-     *                 description: Array of updated workout plans associated with the schedule.
-     *     responses:
-     *       '200':
-     *         description: A successful response indicating that the schedule was updated successfully.
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 message:
-     *                   type: string
-     *                   description: Success message indicating that the schedule was updated successfully.
-     *                 data:
-     *                   $ref: '#/components/schemas/Schedule'
-     *       '404':
-     *         description: Schedule not found.
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 message:
-     *                   type: string
-     *                   description: Error message indicating that the schedule was not found.
-     */
+ * @openapi
+ * /schedule/{schedule_id}:
+ *   put:
+ *     tags:
+ *       - Schedule
+ *     summary: Update a schedule
+ *     description: Update a schedule based on the provided schedule ID and update object.
+ *     parameters:
+ *       - in: path
+ *         name: schedule_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the schedule to be updated.
+ *       - in: body
+ *         name: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             workoutPlans:
+ *               type: array
+ *               items:
+ *                 type: string
+ *               description: An array of updated workout plan IDs associated with the schedule
+ *     responses:
+ *       '200':
+ *         description: Successfully updated the schedule
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Schedule updated successfully
+ *                 data:
+ *                   $ref: '#/components/schemas/Schedule'
+ *       '404':
+ *         description: One or more workout plans not found or schedule not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: One or more workout plans not found or schedule not found
+ */
     try {
-        const workoutPlans = req.body.workoutPlans;
-        const workoutPlanIds = [];
-        for (let i = 0; i < workoutPlans.length; i++) {
-            const existingWorkoutPlan = yield workoutPlan_1.default.findOne({
-                name: workoutPlans[i].name,
-                description: workoutPlans[i].description,
-                icon: workoutPlans[i].icon,
-                muscleType: workoutPlans[i].muscleType,
-                sets: workoutPlans[i].sets,
-                weight: workoutPlans[i].weight,
-                restTime: workoutPlans[i].restTime,
-                intensity: workoutPlans[i].intensity,
-            });
-            if (existingWorkoutPlan) {
-                workoutPlanIds.push(existingWorkoutPlan._id);
-            }
-            else {
-                const newWorkoutPlan = new workoutPlan_1.default(workoutPlans[i]);
-                const savedWorkoutPlan = yield newWorkoutPlan.save();
-                workoutPlanIds.push(savedWorkoutPlan._id);
+        const updateObj = req.body;
+        if (updateObj.hasOwnProperty('workoutPlans')) {
+            const workoutPlans = req.body.workoutPlans;
+            const existingWorkoutPlans = yield workoutPlan_1.default.find({ _id: { $in: workoutPlans } });
+            if (existingWorkoutPlans.length !== workoutPlans.length) {
+                return res.status(404).json({ message: 'One or more workout plans not found' });
             }
         }
-        const updateObj = {
-            startDate: req.body.startDate,
-            endDate: req.body.endDate,
-            workoutPlans: workoutPlanIds,
-        };
         const scheduleId = req.params.schedule_id;
-        const updatedSchedule = yield schedule_1.default.findByIdAndUpdate(scheduleId, updateObj, {
+        const updatedSchedule = yield workoutPlan_1.default.findByIdAndUpdate(scheduleId, updateObj, {
             new: true,
         });
         if (!updatedSchedule) {

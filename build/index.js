@@ -8,7 +8,10 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const user_1 = __importDefault(require("./routes/user"));
+const workoutPlan_1 = __importDefault(require("./routes/workoutPlan"));
 const workoutSession_1 = __importDefault(require("./routes/workoutSession"));
+const schedule_1 = __importDefault(require("./routes/schedule"));
 const swagger_1 = __importDefault(require("./utils/swagger"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -37,5 +40,8 @@ mongoose_1.default
     console.log('Failed to connect to MongoDB');
     console.log(`Error: ${err}`);
 });
+app.use('/api/', user_1.default);
 app.use('/api/', workoutSession_1.default);
+app.use('/api/', workoutPlan_1.default);
+app.use('/api/', schedule_1.default);
 // node build/index.js

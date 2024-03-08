@@ -60,6 +60,6 @@ const exercisePlanSchema = new Schema({
 });
 
 // Create the Exercise Plan model
-const exercisePlan = mongoose.model<IExercisePlan>('exercisePlan', exercisePlanSchema);
+const ExercisePlan = mongoose.model<IExercisePlan>('ExercisePlan', exercisePlanSchema);
 
-export default exercisePlan;
+export default ExercisePlan;
