@@ -217,7 +217,7 @@ router.delete('/user/:user_id', async (req: Request, res: Response, next: NextFu
 		if (!deleted_user) {
 			return res.status(404).json({ status: 'error', message: 'User not found' });
 		}
-		return res.status(200).json({ status: 'error', message: 'User successfully deleted' });
+		return res.status(200).json({ status: 'success', message: 'User successfully deleted' });
 	} catch (err) {
 		console.log(err);
 		next(err);

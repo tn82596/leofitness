@@ -37,6 +37,7 @@ import { IWorkoutPlan } from './workoutPlan';
  *         endDate: "2023-03-31T08:00:00.000Z"
  *         workoutPlans:
  *           - 61f6f1e5d8c62a001d34c91b
+ *           - 65ea92b94f0b59684764732f
  */
 
 export interface ISchedule extends Document {
@@ -54,6 +55,6 @@ const scheduleSchema = new Schema(
 	{ timestamps: true },
 );
 
-const schedule = mongoose.model<ISchedule>('schedule', scheduleSchema);
+const Schedule = mongoose.model<ISchedule>('Schedule', scheduleSchema);
 
-export default schedule;
+export default Schedule;

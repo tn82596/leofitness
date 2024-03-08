@@ -6,53 +6,58 @@ import User from '../models/user';
 const router = express.Router();
 
 // Get all workout plans belonging to a certain user
-router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {
-	/**
-	 * @openapi
-	 * /api/workout_plan/{user_id}:
-	 *   get:
-	 *     tags:
-	 *       - Workout Plan
-	 *     summary: Get workout plans of a user
-	 *     description: Retrieve workout plans associated with the specified user ID.
-	 *     parameters:
-	 *       - in: path
-	 *         name: user_id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *         description: The ID of the user whose workout plans are to be retrieved.
-	 *     responses:
-	 *       '200':
-	 *         description: Successful operation
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 status:
-	 *                   type: string
-	 *                   example: success
-	 *                 data:
-	 *                   type: array
-	 *                   items:
-	 *                     $ref: '#/components/schemas/WorkoutPlan'
-	 *       '404':
-	 *         description: User not found
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 message:
-	 *                   type: string
-	 *                   example: User not found
-	 *       '500':
-	 *         description: Internal Server Error
-	 */
+router.get('/workout_plan/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @openapi
+ * /api/workout_plan/user/{user_id}:
+ *   get:
+ *     tags:
+ *       - Workout Plan
+ *     summary: Get workout plans of a user
+ *     description: Retrieve workout plans associated with the specified user ID.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user whose workout plans are to be retrieved.
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/WorkoutPlan'
+ *       '404':
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       '500':
+ *         description: Internal Server Error
+ */
 	try {
 		const userId = req.params.user_id;
-		const user = await User.findById(userId).populate('workoutPlans');
+		const user = await User.findById(userId)
+		.populate({
+			path:'workoutPlans',
+			model:'WorkoutPlan',
+			populate: { path: 'exercises', model: 'ExercisePlan' }
+		});
 		if (!user) {
 			return res.status(404).json({ message: 'User not found' });
 		}
@@ -66,62 +71,64 @@ router.get('/workout_plan/:user_id', async (req: Request, res: Response, next: N
 
 // Get all workout plans belonging to a user associated with a certain category
 router.get(
-	'/workout_plan/:user_id/category/:category',
+	'/workout_plan/user/:user_id/category/:category',
 	async (req: Request, res: Response, next: NextFunction) => {
-		/**
-		 * @openapi
-		 * /api/workout_plan/{user_id}/category/{category}:
-		 *   get:
-		 *     tags:
-		 *       - Workout Plan
-		 *     summary: Get all workout plans belonging to a user associated with a certain category
-		 *     description: Retrieve all workout plans belonging to a user associated with a specific category based on the provided user ID and category.
-		 *     parameters:
-		 *       - in: path
-		 *         name: user_id
-		 *         required: true
-		 *         schema:
-		 *           type: string
-		 *         description: ID of the user whose workout plans need to be retrieved.
-		 *       - in: path
-		 *         name: category
-		 *         required: true
-		 *         schema:
-		 *           type: string
-		 *         description: Category of the workout plans to be retrieved.
-		 *     responses:
-		 *       '200':
-		 *         description: A successful response with the workout plans belonging to the user and matching the specified category.
-		 *         content:
-		 *           application/json:
-		 *             schema:
-		 *               type: object
-		 *               properties:
-		 *                 status:
-		 *                   type: string
-		 *                   description: Status of the response (success).
-		 *                 data:
-		 *                   type: array
-		 *                   items:
-		 *                     $ref: '#/components/schemas/WorkoutPlan'
-		 *                   description: Array of workout plans belonging to the user and matching the specified category.
-		 *       '404':
-		 *         description: User not found.
-		 *         content:
-		 *           application/json:
-		 *             schema:
-		 *               type: object
-		 *               properties:
-		 *                 message:
-		 *                   type: string
-		 *                   description: Error message indicating that the user was not found.
-		 */
+/**
+ * @openapi
+ * /api/workout_plan/user/{user_id}/category/{category}:
+ *   get:
+ *     tags:
+ *       - Workout Plan
+ *     summary: Get all workout plans belonging to a user associated with a certain category
+ *     description: Retrieve all workout plans belonging to a user associated with a specific category based on the provided user ID and category.
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user whose workout plans need to be retrieved.
+ *       - in: path
+ *         name: category
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category of the workout plans to be retrieved.
+ *     responses:
+ *       '200':
+ *         description: A successful response with the workout plans belonging to the user and matching the specified category.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: Status of the response (success).
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/WorkoutPlan'
+ *                   description: Array of workout plans belonging to the user and matching the specified category.
+ *       '404':
+ *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message indicating that the user was not found.
+ */
 		try {
 			const userId = req.params.user_id;
 			const category = req.params.category;
 			const user = await User.findById(userId).populate({
 				path: 'workoutPlans',
+				model: 'WorkoutPlan',
 				match: { category: category },
+				populate: { path: 'exercises', model: 'ExercisePlan' }
 			});
 
 			if (!user) {
@@ -181,7 +188,7 @@ router.get(
 		 */
 		try {
 			const workoutPlanId = req.params.workout_plan_id;
-			const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
+			const workoutPlan = await WorkoutPlan.findById(workoutPlanId).populate('exercises');
 
 			if (!workoutPlan) {
 				return res.status(404).json({ message: 'Workout plan not found' });
@@ -355,34 +362,34 @@ router.put(
 		 *         description: Internal server error
 		 */
 		try {
-			const exercises = req.body.exercises;
-			const exerciseIds = [];
+			const updateObj = req.body;
 
-			for (let i = 0; i < exercises.length; i++) {
-				const existingExercise = await ExercisePlan.findOne({
-					name: exercises[i].name,
-					description: exercises[i].description,
-					icon: exercises[i].icon,
-					muscleType: exercises[i].muscleType,
-					sets: exercises[i].sets,
-					weight: exercises[i].weight,
-					restTime: exercises[i].restTime,
-					intensity: exercises[i].intensity,
-				});
-				if (existingExercise) {
-					exerciseIds.push(existingExercise._id);
-				} else {
-					const newExercisePlan = new ExercisePlan(exercises[i]);
-					const savedExercisePlan = await newExercisePlan.save();
-					exerciseIds.push(savedExercisePlan._id);
+            if (updateObj.hasOwnProperty('exercises')) {
+				const exercises = req.body.exercises;
+				const exerciseIds = [];
+
+				for (let i = 0; i < exercises.length; i++) {
+					const existingExercise = await ExercisePlan.findOne({
+						name: exercises[i].name,
+						description: exercises[i].description,
+						icon: exercises[i].icon,
+						muscleType: exercises[i].muscleType,
+						sets: exercises[i].sets,
+						weight: exercises[i].weight,
+						restTime: exercises[i].restTime,
+						intensity: exercises[i].intensity,
+					});
+					if (existingExercise) {
+						exerciseIds.push(existingExercise._id);
+					} else {
+						const newExercisePlan = new ExercisePlan(exercises[i]);
+						const savedExercisePlan = await newExercisePlan.save();
+						exerciseIds.push(savedExercisePlan._id);
+					}
 				}
-			}
 
-			const updateObj = {
-				name: req.body.name,
-				category: req.body.category,
-				exercises: exerciseIds,
-			};
+				updateObj.exercises = exerciseIds;
+			}
 
 			const workoutPlanId = req.params.workout_plan_id;
 			const updatedWorkoutPlan = await WorkoutPlan.findByIdAndUpdate(workoutPlanId, updateObj, {

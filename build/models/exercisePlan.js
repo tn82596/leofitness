@@ -36,5 +36,5 @@ const exercisePlanSchema = new mongoose_1.Schema({
     intensity: { type: String, enum: ['low', 'medium', 'high'], required: true },
 });
 // Create the Exercise Plan model
-const exercisePlan = mongoose_1.default.model('exercisePlan', exercisePlanSchema);
-exports.default = exercisePlan;
+const ExercisePlan = mongoose_1.default.model('ExercisePlan', exercisePlanSchema);
+exports.default = ExercisePlan;

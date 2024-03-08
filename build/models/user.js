@@ -29,12 +29,11 @@ const userSchema = new mongoose_1.Schema({
     lastName: { type: String, required: true },
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    date: { type: Date, required: true },
     bio: { type: String },
     picture: { type: String },
     schedule: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Schedule' },
     workoutPlans: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'WorkoutPlan' }],
     workoutSessions: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'WorkoutSession' }],
-});
-const user = mongoose_1.default.model('user', userSchema);
-exports.default = user;
+}, { timestamps: true });
+const User = mongoose_1.default.model('users', userSchema);
+exports.default = User;
