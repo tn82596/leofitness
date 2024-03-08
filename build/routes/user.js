@@ -19,12 +19,12 @@ const router = express_1.default.Router();
 router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/user/{user_id}:
+     * /user/{user_id}:
      *   get:
      *     tags:
      *       - User
-     *     summary: Retrieve a user by ID
-     *     description: Retrieve user information based on the provided user ID.
+     *     summary: Get user by ID
+     *     description: Retrieve a user based on the provided user ID.
      *     parameters:
      *       - in: path
      *         name: user_id
@@ -34,7 +34,7 @@ router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
      *         description: ID of the user to retrieve.
      *     responses:
      *       '200':
-     *         description: A successful response with the user information.
+     *         description: A successful response with the user data.
      *         content:
      *           application/json:
      *             schema:
@@ -42,9 +42,64 @@ router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (success).
+     *                   example: success
      *                 data:
-     *                   $ref: '#/components/schemas/User'
+     *                   type: object
+     *                   properties:
+     *                     _id:
+     *                       type: string
+     *                       description: The unique identifier of the user.
+     *                       example: 65ea90464f0b59684764731a
+     *                     firstName:
+     *                       type: string
+     *                       description: The first name of the user.
+     *                       example: James
+     *                     lastName:
+     *                       type: string
+     *                       description: The last name of the user.
+     *                       example: Smith
+     *                     fullName:
+     *                       type: string
+     *                       description: The full name of the user.
+     *                       example: James Smith
+     *                     email:
+     *                       type: string
+     *                       description: The email address of the user.
+     *                       example: jamessmith@gmail.com
+     *                     bio:
+     *                       type: string
+     *                       description: The biography of the user.
+     *                       example: I love working out
+     *                     picture:
+     *                       type: string
+     *                       description: The picture URL of the user.
+     *                       example: img.png
+     *                     workoutPlans:
+     *                       type: array
+     *                       items:
+     *                         type: string
+     *                       description: An array of workout plan IDs associated with the user.
+     *                       example: ["65ea90c14f0b596847647320", "65ea92b94f0b59684764732f"]
+     *                     workoutSessions:
+     *                       type: array
+     *                       items:
+     *                         type: string
+     *                       description: An array of workout session IDs associated with the user.
+     *                       example: []
+     *                     createdAt:
+     *                       type: string
+     *                       format: date-time
+     *                       description: The timestamp indicating when the user was created.
+     *                       example: 2024-03-08T04:12:54.841Z
+     *                     updatedAt:
+     *                       type: string
+     *                       format: date-time
+     *                       description: The timestamp indicating when the user was last updated.
+     *                       example: 2024-03-08T05:03:51.851Z
+     *                     __v:
+     *                       type: integer
+     *                       description: The version of the user document.
+     *                       example: 2
      *       '404':
      *         description: User not found.
      *         content:
@@ -54,10 +109,10 @@ router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (error).
+     *                   example: error
      *                 message:
      *                   type: string
-     *                   description: Error message indicating that the user was not found.
+     *                   example: User not found.
      */
     try {
         const user_id = req.params.user_id;
@@ -75,7 +130,7 @@ router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
 router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/user:
+     * /user:
      *   post:
      *     tags:
      *       - User
@@ -86,10 +141,36 @@ router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
      *       content:
      *         application/json:
      *           schema:
-     *             $ref: '#/components/schemas/User'
+     *             type: object
+     *             properties:
+     *               firstName:
+     *                 type: string
+     *                 description: The first name of the user.
+     *                 example: James
+     *               lastName:
+     *                 type: string
+     *                 description: The last name of the user.
+     *                 example: Smith
+     *               fullName:
+     *                 type: string
+     *                 description: The full name of the user.
+     *                 example: James Smith
+     *               email:
+     *                 type: string
+     *                 format: email
+     *                 description: The email address of the user.
+     *                 example: jamessmith@gmail.com
+     *               bio:
+     *                 type: string
+     *                 description: The biography of the user.
+     *                 example: I like working out
+     *               picture:
+     *                 type: string
+     *                 description: The picture URL of the user.
+     *                 example: img.png
      *     responses:
      *       '200':
-     *         description: A successful response with the created user data.
+     *         description: Successfully created a new user
      *         content:
      *           application/json:
      *             schema:
@@ -97,9 +178,52 @@ router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (success).
+     *                   example: success
      *                 data:
-     *                   $ref: '#/components/schemas/User'
+     *                   type: object
+     *                   properties:
+     *                     firstName:
+     *                       type: string
+     *                       example: James
+     *                     lastName:
+     *                       type: string
+     *                       example: Smith
+     *                     fullName:
+     *                       type: string
+     *                       example: James Smith
+     *                     email:
+     *                       type: string
+     *                       example: jamessmith@gmail.com
+     *                     bio:
+     *                       type: string
+     *                       example: I like working out
+     *                     picture:
+     *                       type: string
+     *                       example: img.png
+     *                     workoutPlans:
+     *                       type: array
+     *                       items:
+     *                         type: string
+     *                       example: []
+     *                     workoutSessions:
+     *                       type: array
+     *                       items:
+     *                         type: string
+     *                       example: []
+     *                     _id:
+     *                       type: string
+     *                       example: 65ea90464f0b59684764731a
+     *                     createdAt:
+     *                       type: string
+     *                       format: date-time
+     *                       example: 2024-03-08T04:12:54.841Z
+     *                     updatedAt:
+     *                       type: string
+     *                       format: date-time
+     *                       example: 2024-03-08T04:12:54.841Z
+     *                     __v:
+     *                       type: integer
+     *                       example: 0
      */
     try {
         const user_data = req.body;
@@ -116,28 +240,37 @@ router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
 router.put('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/user/{user_id}:
+     * /user/{user_id}:
      *   put:
      *     tags:
      *       - User
-     *     summary: Update a user by ID
-     *     description: Update user information based on the provided user ID.
+     *     summary: Update user by ID
+     *     description: Update user details based on the provided user ID and updated data.
      *     parameters:
      *       - in: path
      *         name: user_id
      *         required: true
      *         schema:
      *           type: string
-     *         description: ID of the user to update.
+     *         description: ID of the user to be updated.
      *     requestBody:
      *       required: true
      *       content:
      *         application/json:
      *           schema:
-     *             $ref: '#/components/schemas/User'
+     *             type: object
+     *             properties:
+     *               bio:
+     *                 type: string
+     *                 description: The updated biography of the user.
+     *                 example: I really enjoy working out!!!
+     *               picture:
+     *                 type: string
+     *                 description: The updated picture URL of the user.
+     *                 example: img2.png
      *     responses:
      *       '200':
-     *         description: A successful response with the updated user data.
+     *         description: Successfully updated the user
      *         content:
      *           application/json:
      *             schema:
@@ -145,9 +278,64 @@ router.put('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (success).
+     *                   example: success
      *                 data:
-     *                   $ref: '#/components/schemas/User'
+     *                   type: object
+     *                   properties:
+     *                     _id:
+     *                       type: string
+     *                       description: The unique identifier of the user.
+     *                       example: 65ea90464f0b59684764731a
+     *                     firstName:
+     *                       type: string
+     *                       description: The first name of the user.
+     *                       example: James
+     *                     lastName:
+     *                       type: string
+     *                       description: The last name of the user.
+     *                       example: Smith
+     *                     fullName:
+     *                       type: string
+     *                       description: The full name of the user.
+     *                       example: James Smith
+     *                     email:
+     *                       type: string
+     *                       description: The email address of the user.
+     *                       example: jamessmith@gmail.com
+     *                     bio:
+     *                       type: string
+     *                       description: The updated biography of the user.
+     *                       example: I really enjoy working out!!!
+     *                     picture:
+     *                       type: string
+     *                       description: The updated picture URL of the user.
+     *                       example: img2.png
+     *                     workoutPlans:
+     *                       type: array
+     *                       items:
+     *                         type: string
+     *                       description: An array of workout plan IDs associated with the user.
+     *                       example: ["65ea90c14f0b596847647320", "65ea92b94f0b59684764732f"]
+     *                     workoutSessions:
+     *                       type: array
+     *                       items:
+     *                         type: string
+     *                       description: An array of workout session IDs associated with the user.
+     *                       example: []
+     *                     createdAt:
+     *                       type: string
+     *                       format: date-time
+     *                       description: The timestamp indicating when the user was created.
+     *                       example: 2024-03-08T04:12:54.841Z
+     *                     updatedAt:
+     *                       type: string
+     *                       format: date-time
+     *                       description: The timestamp indicating when the user was last updated.
+     *                       example: 2024-03-08T14:58:28.794Z
+     *                     __v:
+     *                       type: integer
+     *                       description: The version of the user document.
+     *                       example: 2
      *       '404':
      *         description: User not found.
      *         content:
@@ -157,10 +345,10 @@ router.put('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (error).
+     *                   example: error
      *                 message:
      *                   type: string
-     *                   description: Error message indicating that the user was not found.
+     *                   example: User not found.
      */
     try {
         const user_id = req.params.user_id;
@@ -180,11 +368,11 @@ router.put('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
 router.delete('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/user/{user_id}:
+     * /user/{user_id}:
      *   delete:
      *     tags:
      *       - User
-     *     summary: Delete a user by ID
+     *     summary: Delete user by ID
      *     description: Delete a user based on the provided user ID.
      *     parameters:
      *       - in: path
@@ -192,10 +380,10 @@ router.delete('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, vo
      *         required: true
      *         schema:
      *           type: string
-     *         description: ID of the user to delete.
+     *         description: ID of the user to be deleted.
      *     responses:
      *       '200':
-     *         description: A successful response indicating that the user was deleted.
+     *         description: Successfully deleted the user
      *         content:
      *           application/json:
      *             schema:
@@ -203,10 +391,10 @@ router.delete('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, vo
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (success).
+     *                   example: success
      *                 message:
      *                   type: string
-     *                   description: Success message indicating that the user was deleted.
+     *                   example: User successfully deleted
      *       '404':
      *         description: User not found.
      *         content:
@@ -216,10 +404,10 @@ router.delete('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, vo
      *               properties:
      *                 status:
      *                   type: string
-     *                   description: Status of the response (error).
+     *                   example: error
      *                 message:
      *                   type: string
-     *                   description: Error message indicating that the user was not found.
+     *                   example: User not found.
      */
     try {
         const user_id = req.params.user_id;
