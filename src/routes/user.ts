@@ -115,7 +115,7 @@ router.get('/user/:user_id', async (req: Request, res: Response, next: NextFunct
 });
 
 // CREATE
-router.post('/user', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
  * /user:
@@ -215,6 +215,8 @@ router.post('/user', async (req: Request, res: Response, next: NextFunction) => 
  */
 	try {
 		const user_data: IUser = req.body;
+		user_data._id = req.params.user_id;
+
 		const new_user = new User(user_data);
 		const saved_user = await new_user.save();
 		res.status(200).send({ status: 'success', data: saved_user });
