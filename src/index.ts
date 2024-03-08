@@ -3,10 +3,10 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import userRouter from './routes/user';
-import workoutPlanRouter from './routes/workoutPlan'
 import workoutSessionRouter from './routes/workoutSession';
+import userRouter from './routes/user';
 import scheduleRouter from './routes/schedule';
+import workoutPlanRouter from './routes/workoutPlan';
 import swaggerDocs from './utils/swagger';
 
 dotenv.config();
@@ -32,21 +32,20 @@ app.listen(port, () => {
 const uri = process.env.MONGODB_URI || '';
 
 // connect to mongodb database
- mongoose
- 	.connect(uri)
- 	.then(() => {
- 		console.log('Successfully connected to MongoDB!');
- 	})
- 	.catch((err: mongoose.Error) => {
- 		mongoose.disconnect();
- 		console.log('Failed to connect to MongoDB');
- 		console.log(`Error: ${err}`);
- 	});
+mongoose
+	.connect(uri)
+	.then(() => {
+		console.log('Successfully connected to MongoDB!');
+	})
+	.catch((err: mongoose.Error) => {
+		mongoose.disconnect();
+		console.log('Failed to connect to MongoDB');
+		console.log(`Error: ${err}`);
+	});
 
-app.use('/api/', userRouter);
 app.use('/api/', workoutSessionRouter);
+app.use('/api/', userRouter);
 app.use('/api/', workoutPlanRouter);
 app.use('/api/', scheduleRouter);
-
 
 // node build/index.js
