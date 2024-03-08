@@ -22,18 +22,30 @@ import { Schema, model, Document, Types } from 'mongoose';
  *             description: "Description of Exercise 1"
  *             icon: "icon-url-1"
  *             muscleType: "muscle-type-1"
- *             sets: 3
- *             weight: 10
- *             restTime: 60
- *             intensity: "high"
+ *             category: "category-1"  # Updated to include category
+ *             sets:
+ *               - setNum: 1
+ *                 weight: 10
+ *                 duration: 60
+ *                 restTime: 30
+ *               - setNum: 2
+ *                 weight: 15
+ *                 duration: 45
+ *                 restTime: 30
  *           - name: "Exercise 2"
  *             description: "Description of Exercise 2"
  *             icon: "icon-url-2"
  *             muscleType: "muscle-type-2"
- *             sets: 4
- *             weight: 15
- *             restTime: 45
- *             intensity: "medium"
+ *             category: "category-2"  # Updated to include category
+ *             sets:
+ *               - setNum: 1
+ *                 weight: 20
+ *                 duration: 60
+ *                 restTime: 30
+ *               - setNum: 2
+ *                 weight: 25
+ *                 duration: 45
+ *                 restTime: 30
  */
 
 export interface IWorkoutSession extends Document {
