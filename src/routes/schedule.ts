@@ -481,12 +481,40 @@ router.put('/schedule/:schedule_id', async (req: Request, res: Response, next: N
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 status:
  *                   type: string
- *                   description: A success message indicating that the schedule was updated successfully.
- *                   example: Schedule updated successfully
+ *                   description: Status of the response (success).
+ *                   example: success
  *                 data:
- *                   $ref: '#/components/schemas/Schedule'
+ *                   type: object
+ *                   properties:
+ *                     startDate:
+ *                       type: string
+ *                       format: date-time
+ *                       description: The start date of the schedule.
+ *                     endDate:
+ *                       type: string
+ *                       format: date-time
+ *                       description: The end date of the schedule.
+ *                     workoutPlans:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       description: Array of workout plan IDs associated with the schedule.
+ *                     _id:
+ *                       type: string
+ *                       description: The ID of the created schedule.
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       description: The timestamp when the schedule was created.
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       description: The timestamp when the schedule was last updated.
+ *                     __v:
+ *                       type: integer
+ *                       description: Version key.
  *       '404':
  *         description: Schedule not found or one or more workout plans not found.
  *         content:
