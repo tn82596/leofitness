@@ -27,7 +27,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const scheduleSchema = new mongoose_1.Schema({
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
-    workoutPlans: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'WorkoutPlan' }],
+    workoutPlans: [{ type: mongoose_1.Schema.Types.ObjectId }],
 }, { timestamps: true });
 const Schedule = mongoose_1.default.model('Schedule', scheduleSchema);
 exports.default = Schedule;
