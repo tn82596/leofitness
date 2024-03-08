@@ -7,7 +7,7 @@ const options: swaggerJsdoc.Options = {
 	definition: {
 		openapi: '3.0.0',
 		info: {
-			title: 'LeoFiness API Docs',
+			title: 'LeoFitness API Docs',
 			version: '1.0.0',
 		},
 		// add security Scheme later after we figure out user authentication

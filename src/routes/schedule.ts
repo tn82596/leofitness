@@ -229,7 +229,7 @@ router.post('/schedule/:user_id', async (req: Request, res: Response, next: Next
 
 // update a schedule
 router.put('/schedule/:schedule_id', async (req: Request, res: Response, next: NextFunction) => {
-	/**
+/**
  * @openapi
  * /schedule/{schedule_id}:
  *   put:
@@ -298,9 +298,7 @@ router.put('/schedule/:schedule_id', async (req: Request, res: Response, next: N
 		if (!updatedSchedule) {
 			return res.status(404).json({ message: 'Schedule not found' });
 		}
-		res
-			.status(200)
-			.json({ message: 'Schedule updated successfully', data: updatedSchedule });
+		res.status(200).json({ message: 'Schedule updated successfully', data: updatedSchedule });
 	} catch (err) {
 		console.log(err);
 		next(err);
@@ -308,59 +306,56 @@ router.put('/schedule/:schedule_id', async (req: Request, res: Response, next: N
 });
 
 // DELETE
-router.delete(
-	'/schedule/:schedule_id',
-	async (req: Request, res: Response, next: NextFunction) => {
-/**
- * @openapi
- * /api/schedule/{schedule_id}:
- *   delete:
- *     tags:
- *       - Schedule
- *     summary: Delete a schedule
- *     description: Delete an existing schedule.
- *     parameters:
- *       - in: path
- *         name: schedule_id
- *         required: true
- *         schema:
- *           type: string
- *         description: ID of the schedule to be deleted.
- *     responses:
- *       '200':
- *         description: A successful response indicating that the schedule was deleted successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   description: Success status indicating that the schedule was deleted successfully.
- *       '404':
- *         description: Schedule not found.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Error message indicating that the schedule was not found.
- */
-		try {
-			const scheduleId = req.params.schedule_id;
-			const deletedSchedule = await Schedule.findByIdAndDelete(scheduleId);
+router.delete('/schedule/:schedule_id', async (req: Request, res: Response, next: NextFunction) => {
+	/**
+	 * @openapi
+	 * /api/schedule/{schedule_id}:
+	 *   delete:
+	 *     tags:
+	 *       - Schedule
+	 *     summary: Delete a schedule
+	 *     description: Delete an existing schedule.
+	 *     parameters:
+	 *       - in: path
+	 *         name: schedule_id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *         description: ID of the schedule to be deleted.
+	 *     responses:
+	 *       '200':
+	 *         description: A successful response indicating that the schedule was deleted successfully.
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 status:
+	 *                   type: string
+	 *                   description: Success status indicating that the schedule was deleted successfully.
+	 *       '404':
+	 *         description: Schedule not found.
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 message:
+	 *                   type: string
+	 *                   description: Error message indicating that the schedule was not found.
+	 */
+	try {
+		const scheduleId = req.params.schedule_id;
+		const deletedSchedule = await Schedule.findByIdAndDelete(scheduleId);
 
-			if (!deletedSchedule) {
-				return res.status(404).json({ message: 'Schedule not found' });
-			}
-			res.status(200).send({ status: 'success' });
-		} catch (err) {
-			console.log(err);
-			next(err);
+		if (!deletedSchedule) {
+			return res.status(404).json({ message: 'Schedule not found' });
 		}
-	},
-);
+		res.status(200).send({ status: 'success' });
+	} catch (err) {
+		console.log(err);
+		next(err);
+	}
+});
 
 export default router;
