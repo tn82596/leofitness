@@ -21,7 +21,7 @@ const router = express_1.default.Router();
 router.get('/schedule/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @swagger
-     * /schedule/user/{user_id}:
+     * /api/schedule/user/{user_id}:
      *   get:
      *     tags:
      *       - Schedule
@@ -174,7 +174,7 @@ router.get('/schedule/user/:user_id', (req, res, next) => __awaiter(void 0, void
 router.get('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @swagger
-     * /schedule/{schedule_id}:
+     * /api/schedule/{schedule_id}:
      *   get:
      *     tags:
      *       - Schedule
@@ -319,7 +319,7 @@ router.get('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 
 router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /schedule/{user_id}:
+     * /api/schedule/{user_id}:
      *   post:
      *     tags:
      *       - Schedule
@@ -440,7 +440,7 @@ router.post('/schedule/:user_id', (req, res, next) => __awaiter(void 0, void 0, 
 router.put('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /schedule/{schedule_id}:
+     * /api/schedule/{schedule_id}:
      *   put:
      *     tags:
      *       - Schedule
@@ -561,7 +561,7 @@ router.delete('/schedule/:schedule_id', (req, res, next) => __awaiter(void 0, vo
     try {
         /**
  * @openapi
- * /schedule/{schedule_id}:
+ * /api/schedule/{schedule_id}:
  *   delete:
  *     tags:
  *       - Schedule

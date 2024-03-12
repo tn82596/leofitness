@@ -960,6 +960,12 @@ router.delete(
  *         schema:
  *           type: string
  *         description: ID of the workout plan to be deleted.
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user who's workout plan is to be deleted
  *     responses:
  *       '200':
  *         description: Successfully deleted the workout plan
