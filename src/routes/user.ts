@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
- * /user/{user_id}:
+ * /api/user/{user_id}:
  *   get:
  *     tags:
  *       - User
@@ -118,7 +118,7 @@ router.get('/user/:user_id', async (req: Request, res: Response, next: NextFunct
 router.post('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
- * /user/{user_id}:
+ * /api/user/{user_id}:
  *   post:
  *     tags:
  *       - User
@@ -230,7 +230,7 @@ router.post('/user/:user_id', async (req: Request, res: Response, next: NextFunc
 router.put('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
- * /user/{user_id}:
+ * /api/user/{user_id}:
  *   put:
  *     tags:
  *       - User
@@ -359,7 +359,7 @@ router.put('/user/:user_id', async (req: Request, res: Response, next: NextFunct
 router.delete('/user/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
- * /user/{user_id}:
+ * /api/user/{user_id}:
  *   delete:
  *     tags:
  *       - User

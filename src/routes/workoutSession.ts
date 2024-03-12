@@ -101,10 +101,10 @@ router.get('/workout_session/:user_id', async (req: Request, res: Response) => {
 });
 
 // CREATE
-router.post('/workout_session/', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/workout_session/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 	/**
 	 * @openapi
-	 * /api/workout_session:
+	 * /api/workout_session/{user_id}:
 	 *   post:
 	 *     tags:
 	 *       - Workout Session
@@ -228,13 +228,21 @@ router.post('/workout_session/', async (req: Request, res: Response, next: NextF
 
 		// Create and save new workout session
 		const newSession = new WorkoutSessionModel(insertObj);
-		const bruh = await newSession.save();
-		const session = await bruh.populate({
+		const savedSession = await newSession.save();
+		const session = await savedSession.populate({
 			path: 'exercises',
 			populate: {
 				path: 'sets',
 			},
 		});
+
+		// add new workoutPlan to user's workoutPlan array
+		const user = await User.findById(req.params.user_id);
+		if (!user) {
+			return res.status(404).json({ status: 'error', message: 'User not found' });
+		}
+		user.workoutSessions.push(savedSession._id);
+		await user.save();
 
 		res.status(201).json({ status: 'success', data: session });
 	} catch (err) {
@@ -398,7 +406,7 @@ router.put(
 router.delete('/workout_session/:workout_session_id', async (req: Request, res: Response) => {
 	/**
 	 * @openapi
-	 * /workout_session/{workout_session_id}:
+	 * /api/workout_session/{workout_session_id}:
 	 *   delete:
 	 *     tags:
 	 *       - Workout Session
