@@ -112,10 +112,10 @@ router.get('/workout_session/:user_id', (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 // CREATE
-router.post('/workout_session/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/workout_session/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /api/workout_session:
+     * /api/workout_session/{user_id}:
      *   post:
      *     tags:
      *       - Workout Session
@@ -235,13 +235,20 @@ router.post('/workout_session/', (req, res, next) => __awaiter(void 0, void 0, v
         };
         // Create and save new workout session
         const newSession = new workoutSession_1.default(insertObj);
-        const bruh = yield newSession.save();
-        const session = yield bruh.populate({
+        const savedSession = yield newSession.save();
+        const session = yield savedSession.populate({
             path: 'exercises',
             populate: {
                 path: 'sets',
             },
         });
+        // add new workoutSession to user's workoutSessions array
+        const user = yield user_1.default.findById(req.params.user_id);
+        if (!user) {
+            return res.status(404).json({ status: 'error', message: 'User not found' });
+        }
+        user.workoutSessions.push(savedSession._id);
+        yield user.save();
         res.status(201).json({ status: 'success', data: session });
     }
     catch (err) {
@@ -382,10 +389,10 @@ router.put('/workout_session/:workout_session_id', (req, res, next) => __awaiter
     }
 }));
 // DELETE
-router.delete('/workout_session/:workout_session_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/workout_session/:workout_session_id/user/:user_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /workout_session/{workout_session_id}:
+     * /api/workout_session/{workout_session_id}/user/{user_id}:
      *   delete:
      *     tags:
      *       - Workout Session
@@ -418,12 +425,17 @@ router.delete('/workout_session/:workout_session_id', (req, res) => __awaiter(vo
      *         description: Internal Server Error
      */
     try {
+        const userId = req.params.user_id;
         const workoutSessionId = req.params.workout_session_id;
         const deletedSession = yield workoutSession_1.default.findOneAndDelete({ _id: workoutSessionId });
-        if (deletedSession)
-            res.status(200).send({ status: 'success', data: deletedSession });
-        else
-            res.status(400).send({ status: 'error', message: 'workout session not found' });
+        if (!deletedSession) {
+            return res.status(404).json({ message: 'Workout session not found' });
+        }
+        const result = yield user_1.default.updateOne({ _id: userId }, { $pull: { workoutSessions: workoutSessionId } });
+        if (result.modifiedCount == 0) {
+            return res.status(404).json({ message: 'User not found or workout session not associated with the user' });
+        }
+        res.status(200).send({ status: 'success', data: deletedSession });
     }
     catch (err) {
         res.status(500).json({ status: 'error', message: err });

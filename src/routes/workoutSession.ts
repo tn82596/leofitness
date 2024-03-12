@@ -109,6 +109,13 @@ router.post('/workout_session/:user_id', async (req: Request, res: Response, nex
 	 *     tags:
 	 *       - Workout Session
 	 *     summary: Create a new workout session which contains a list of exercise objects
+	 *     parameters:
+     *       - in: path
+     *         name: user_id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: ID of the user whose workout session is to be created
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -419,6 +426,12 @@ router.delete('/workout_session/:workout_session_id/user/:user_id', async (req: 
 	 *         schema:
 	 *           type: string
 	 *         description: The ID of the workout session to delete.
+	 *        - in: path
+     *         name: user_id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: ID of the user who's workout session is to be deleted
 	 *     responses:
 	 *       '200':
 	 *         description: OK

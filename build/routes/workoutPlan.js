@@ -22,7 +22,7 @@ router.get('/workout_plan/user/:user_id', (req, res, next) => __awaiter(void 0, 
     try {
         /**
          * @openapi
-         * /workout_plan/user/{user_id}:
+         * /api/workout_plan/user/{user_id}:
          *   get:
          *     tags:
          *       - Workout Plan
@@ -243,7 +243,7 @@ router.get('/workout_plan/user/:user_id/category/:category', (req, res, next) =>
     try {
         /**
          * @openapi
-         * /workout_plan/user/{user_id}/category/{category}:
+         * /api/workout_plan/user/{user_id}/category/{category}:
          *   get:
          *     tags:
          *       - Workout Plan
@@ -438,7 +438,7 @@ router.get('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
     try {
         /**
          * @openapi
-         * /workout_plan/{workout_plan_id}:
+         * /api/workout_plan/{workout_plan_id}:
          *   get:
          *     tags:
          *       - Workout Plan
@@ -580,7 +580,7 @@ router.get('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
 router.post('/workout_plan/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /workout_plan/{user_id}:
+     * /api/workout_plan/{user_id}:
      *   post:
      *     tags:
      *       - Workout Plan
@@ -747,7 +747,7 @@ router.post('/workout_plan/:user_id', (req, res, next) => __awaiter(void 0, void
 router.put('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /workout_plan/{workout_plan_id}:
+     * /api/workout_plan/{workout_plan_id}:
      *   put:
      *     tags:
      *       - Workout Plan
@@ -932,10 +932,10 @@ router.put('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 
     }
 }));
 // DELETE
-router.delete('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/workout_plan/:workout_plan_id/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /workout_plan/{workout_plan_id}:
+     * /api/workout_plan/{workout_plan_id}/user/{user_id}:
      *   delete:
      *     tags:
      *       - Workout Plan
@@ -973,10 +973,15 @@ router.delete('/workout_plan/:workout_plan_id', (req, res, next) => __awaiter(vo
      *                   example: Workout plan not found.
      */
     try {
+        const userId = req.params.user_id;
         const workoutPlanId = req.params.workout_plan_id;
         const deletedWorkoutPlan = yield workoutPlan_1.default.findByIdAndDelete(workoutPlanId);
         if (!deletedWorkoutPlan) {
             return res.status(404).json({ message: 'Workout plan not found' });
+        }
+        const result = yield user_1.default.updateOne({ _id: userId }, { $pull: { workoutPlans: workoutPlanId } });
+        if (result.modifiedCount == 0) {
+            return res.status(404).json({ message: 'User not found or workout plan not associated with the user' });
         }
         res.status(200).send({ status: 'success' });
     }
