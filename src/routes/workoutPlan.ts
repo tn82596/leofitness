@@ -997,7 +997,7 @@ router.delete(
                 { _id: userId },
                 { $pull: { workoutPlans: workoutPlanId } }
             );
-            if (result.n == 0) {
+            if (result.modifiedCount == 0) {
                 return res.status(404).json({ message: 'User not found or workout plan not associated with the user' });
             }
 

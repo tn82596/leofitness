@@ -236,7 +236,7 @@ router.post('/workout_session/:user_id', async (req: Request, res: Response, nex
 			},
 		});
 
-		// add new workoutPlan to user's workoutPlan array
+		// add new workoutSession to user's workoutSessions array
 		const user = await User.findById(req.params.user_id);
 		if (!user) {
 			return res.status(404).json({ status: 'error', message: 'User not found' });
@@ -403,10 +403,10 @@ router.put(
 );
 
 // DELETE
-router.delete('/workout_session/:workout_session_id', async (req: Request, res: Response) => {
+router.delete('/workout_session/:workout_session_id/user/:user_id', async (req: Request, res: Response) => {
 	/**
 	 * @openapi
-	 * /api/workout_session/{workout_session_id}:
+	 * /api/workout_session/{workout_session_id}/user/{user_id}:
 	 *   delete:
 	 *     tags:
 	 *       - Workout Session
@@ -440,11 +440,23 @@ router.delete('/workout_session/:workout_session_id', async (req: Request, res: 
 	 */
 
 	try {
+		const userId = req.params.user_id;
 		const workoutSessionId = req.params.workout_session_id;
-		const deletedSession = await WorkoutSessionModel.findOneAndDelete({ _id: workoutSessionId });
 
-		if (deletedSession) res.status(200).send({ status: 'success', data: deletedSession });
-		else res.status(400).send({ status: 'error', message: 'workout session not found' });
+		const deletedSession = await WorkoutSessionModel.findOneAndDelete({ _id: workoutSessionId });
+		if (!deletedSession) {
+			return res.status(404).json({ message: 'Workout session not found' });
+		}
+
+		const result = await User.updateOne(
+			{ _id: userId },
+			{ $pull: { workoutSessions: workoutSessionId } }
+		);
+		if (result.modifiedCount == 0) {
+			return res.status(404).json({ message: 'User not found or workout session not associated with the user' });
+		}
+
+		res.status(200).send({ status: 'success', data: deletedSession});
 	} catch (err) {
 		res.status(500).json({ status: 'error', message: err });
 	}
