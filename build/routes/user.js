@@ -127,15 +127,15 @@ router.get('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 
     }
 }));
 // CREATE
-router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/user/:user_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     /**
      * @openapi
-     * /user:
+     * /user/{user_id}:
      *   post:
      *     tags:
      *       - User
      *     summary: Create a new user
-     *     description: Create a new user with the provided user data.
+     *     description: Create a new user with the provided user data, setting document ID to google ID.
      *     requestBody:
      *       required: true
      *       content:
@@ -227,6 +227,7 @@ router.post('/user', (req, res, next) => __awaiter(void 0, void 0, void 0, funct
      */
     try {
         const user_data = req.body;
+        user_data._id = req.params.user_id;
         const new_user = new user_1.default(user_data);
         const saved_user = yield new_user.save();
         res.status(200).send({ status: 'success', data: saved_user });

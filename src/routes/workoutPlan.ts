@@ -10,7 +10,7 @@ router.get('/workout_plan/user/:user_id', async (req: Request, res: Response, ne
 	try {
 /**
  * @openapi
- * /workout_plan/user/{user_id}:
+ * /api/workout_plan/user/{user_id}:
  *   get:
  *     tags:
  *       - Workout Plan
@@ -234,7 +234,7 @@ router.get(
 		try {
 /**
  * @openapi
- * /workout_plan/user/{user_id}/category/{category}:
+ * /api/workout_plan/user/{user_id}/category/{category}:
  *   get:
  *     tags:
  *       - Workout Plan
@@ -434,7 +434,7 @@ router.get(
 		try {
 /**
  * @openapi
- * /workout_plan/{workout_plan_id}:
+ * /api/workout_plan/{workout_plan_id}:
  *   get:
  *     tags:
  *       - Workout Plan
@@ -578,7 +578,7 @@ router.get(
 router.post('/workout_plan/:user_id', async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
- * /workout_plan/{user_id}:
+ * /api/workout_plan/{user_id}:
  *   post:
  *     tags:
  *       - Workout Plan
@@ -752,7 +752,7 @@ router.put(
 	async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
- * /workout_plan/{workout_plan_id}:
+ * /api/workout_plan/{workout_plan_id}:
  *   put:
  *     tags:
  *       - Workout Plan
@@ -943,11 +943,11 @@ router.put(
 
 // DELETE
 router.delete(
-	'/workout_plan/:workout_plan_id',
+	'/workout_plan/:workout_plan_id/user/:user_id',
 	async (req: Request, res: Response, next: NextFunction) => {
 /**
  * @openapi
- * /workout_plan/{workout_plan_id}:
+ * /api/workout_plan/{workout_plan_id}/user/{user_id}:
  *   delete:
  *     tags:
  *       - Workout Plan
@@ -985,12 +985,22 @@ router.delete(
  *                   example: Workout plan not found.
  */
 		try {
+			const userId = req.params.user_id;
 			const workoutPlanId = req.params.workout_plan_id;
-			const deletedWorkoutPlan = await WorkoutPlan.findByIdAndDelete(workoutPlanId);
 
+			const deletedWorkoutPlan = await WorkoutPlan.findByIdAndDelete(workoutPlanId);
 			if (!deletedWorkoutPlan) {
 				return res.status(404).json({ message: 'Workout plan not found' });
 			}
+
+			const result = await User.updateOne(
+                { _id: userId },
+                { $pull: { workoutPlans: workoutPlanId } }
+            );
+            if (result.n == 0) {
+                return res.status(404).json({ message: 'User not found or workout plan not associated with the user' });
+            }
+
 			res.status(200).send({ status: 'success' });
 		} catch (err) {
 			console.log(err);
