@@ -411,47 +411,46 @@ router.put(
 
 // DELETE
 router.delete('/workout_session/:workout_session_id/user/:user_id', async (req: Request, res: Response) => {
-	/**
-	 * @openapi
-	 * /api/workout_session/{workout_session_id}/user/{user_id}:
-	 *   delete:
-	 *     tags:
-	 *       - Workout Session
-	 *     summary: Delete a workout session
-	 *     description: Delete a workout session by providing the workout session ID.
-	 *     parameters:
-	 *       - in: path
-	 *         name: workout_session_id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *         description: The ID of the workout session to delete.
-	 *        - in: path
-     *         name: user_id
-     *         required: true
-     *         schema:
-     *           type: string
-     *         description: ID of the user who's workout session is to be deleted
-	 *     responses:
-	 *       '200':
-	 *         description: OK
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 status:
-	 *                   type: string
-	 *                 data:
-	 *                   $ref: '#/components/schemas/WorkoutSession'
-	 *       '400':
-	 *         description: Bad Request
-	 *       '404':
-	 *         description: Workout session not found
-	 *       '500':
-	 *         description: Internal Server Error
-	 */
-
+/**
+ * @openapi
+ * /api/workout_session/{workout_session_id}/user/{user_id}:
+ *   delete:
+ *     tags:
+ *       - Workout Session
+ *     summary: Delete a workout session
+ *     description: Delete a workout session by providing the workout session ID.
+ *     parameters:
+ *       - in: path
+ *         name: workout_session_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the workout session to delete.
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user who's workout session is to be deleted
+ *     responses:
+ *       '200':
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/WorkoutSession'
+ *       '400':
+ *         description: Bad Request
+ *       '404':
+ *         description: Workout session not found
+ *       '500':
+ *         description: Internal Server Error
+ */
 	try {
 		const userId = req.params.user_id;
 		const workoutSessionId = req.params.workout_session_id;
