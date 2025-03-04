@@ -1,6 +1,40 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-// Exercise Plan Schema
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     ExercisePlan:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         icon:
+ *           type: string
+ *         muscleType:
+ *           type: string
+ *         sets:
+ *           type: integer
+ *           format: int32
+ *         reps:
+ *           type: integer
+ *           format: int32
+ *         weight:
+ *           type: number
+ *           format: float
+ *         restTime:
+ *           type: integer
+ *           format: int32
+ *         intensity:
+ *           type: string
+ *           enum:
+ *             - low
+ *             - medium
+ *             - high
+ */
+
 export interface IExercisePlan extends Document {
 	name: string;
 	description: string;
@@ -26,6 +60,6 @@ const exercisePlanSchema = new Schema({
 });
 
 // Create the Exercise Plan model
-const exercisePlan = mongoose.model<IExercisePlan>('exercisePlan', exercisePlanSchema);
+const ExercisePlan = mongoose.model<IExercisePlan>('ExercisePlan', exercisePlanSchema);
 
-export default exercisePlan;
+export default ExercisePlan;
